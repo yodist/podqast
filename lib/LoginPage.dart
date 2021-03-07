@@ -32,6 +32,7 @@ class _BodyState extends State<Body> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        SizedBox(height: 100),
         Image(
           image: AssetImage('assets/image/PodQast.png'),
           height: 60,
@@ -46,7 +47,7 @@ class _BodyState extends State<Body> {
           ),
           width: 250,
         ),
-        SizedBox(height: 80),
+        SizedBox(height: 60),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,6 +102,15 @@ class _BodyState extends State<Body> {
             "Listen as a guest",
             style: GoogleFonts.robotoCondensed(
                 fontSize: 18, color: Color(0xff6734F6)),
+            textAlign: TextAlign.center,
+          ),
+          width: 180,
+        ),
+        SizedBox(height: 100),
+        Container(
+          child: Text(
+            "Developed by Yodist team",
+            style: GoogleFonts.robotoCondensed(fontSize: 15),
             textAlign: TextAlign.center,
           ),
           width: 180,
