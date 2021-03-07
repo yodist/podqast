@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/HomePage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -22,7 +23,7 @@ class _BodyState extends State<Body> {
   }
 
   void click() {
-    Navigator.push(context,
+    Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (context) => HomePage(title: "PodQast")));
   }
 
@@ -36,8 +37,16 @@ class _BodyState extends State<Body> {
           height: 60,
         ),
         SizedBox(height: 30),
-        Text('Listen to your favorite podcast anytime ' +
-            'anywhere and customize your podcast playlist'),
+        Container(
+          child: Text(
+            'Listen to your favorite podcast anytime ' +
+                'anywhere and customize your podcast playlist',
+            style: GoogleFonts.robotoCondensed(fontSize: 20),
+            textAlign: TextAlign.center,
+          ),
+          width: 250,
+        ),
+        SizedBox(height: 80),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,11 +57,8 @@ class _BodyState extends State<Body> {
                 onPressed: this.click,
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(45),
                       side: BorderSide(color: Colors.grey)),
-                  textStyle: TextStyle(),
-
-                  // splashColor: Colors.grey,
+                  backgroundColor: Colors.grey[800],
                 ),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
@@ -60,20 +66,45 @@ class _BodyState extends State<Body> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(
-                          'Sign in',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      )
+                      Text('Sign in',
+                          style: GoogleFonts.montserrat(
+                              fontSize: 20, color: Colors.white)),
                     ],
                   ),
                 ),
               ),
             ))
           ],
-        )
+        ),
+        SizedBox(height: 30),
+        Container(
+          child: Text(
+            "Don't have an account? Sign up here",
+            style: GoogleFonts.robotoCondensed(
+                fontSize: 18, color: Color(0xff6734F6)),
+            textAlign: TextAlign.center,
+          ),
+          width: 180,
+        ),
+        SizedBox(height: 20),
+        Container(
+          child: Text(
+            "or",
+            style: GoogleFonts.robotoCondensed(fontSize: 18),
+            textAlign: TextAlign.center,
+          ),
+          width: 180,
+        ),
+        SizedBox(height: 20),
+        Container(
+          child: Text(
+            "Listen as a guest",
+            style: GoogleFonts.robotoCondensed(
+                fontSize: 18, color: Color(0xff6734F6)),
+            textAlign: TextAlign.center,
+          ),
+          width: 180,
+        ),
       ],
     );
   }
