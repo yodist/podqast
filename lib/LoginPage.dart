@@ -106,14 +106,15 @@ class _BodyState extends State<Body> {
           ),
           width: 180,
         ),
-        SizedBox(height: 100),
+        SizedBox(height: 90),
         Container(
           child: Text(
             "Developed by Yodist team",
-            style: GoogleFonts.robotoCondensed(fontSize: 15),
+            style: GoogleFonts.robotoCondensed(
+                fontSize: 16, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          width: 180,
+          width: 100,
         ),
       ],
     );
