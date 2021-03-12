@@ -18,7 +18,7 @@ class _PodcastState extends State<Podcast> {
           icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        backgroundColor: Colors.purple[400],
+        backgroundColor: Colors.grey[850],
       ),
       body: Center(
         child: ElevatedButton(
