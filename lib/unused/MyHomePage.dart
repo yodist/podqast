@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:flutter_application_1/MyCard.dart';
+import 'package:flutter_application_1/unused/MyCard.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

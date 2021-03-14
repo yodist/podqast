@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Podcast.dart';
+import 'package:flutter_application_1/PodcastListPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget podcastBlock(BuildContext context, String imageUrl, String title,
@@ -11,7 +11,7 @@ Widget podcastBlock(BuildContext context, String imageUrl, String title,
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Podcast(
+            builder: (context) => PodcastListPage(
                   title: "PodQast",
                 )),
       );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Podcast.dart';
+import 'package:flutter_application_1/PodcastListPage.dart';
 
 class MyCard extends StatelessWidget {
   MyCard({Key key, this.iconUrl, this.title, this.subtitle}) : super(key: key);
@@ -17,7 +17,7 @@ class MyCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Podcast(
+                builder: (context) => PodcastListPage(
                       title: "PodQast",
                     )),
           );

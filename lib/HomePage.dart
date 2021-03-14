@@ -13,14 +13,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<Map<String, dynamic>> futureBestPod;
-  List<Widget> myCardList;
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    futureBestPod = fetchBestPodcasts();
   }
+
+  List<Widget> _widgetOptions = <Widget>[
+    podcastHome(),
+    Text('Index 1: Business'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -36,50 +45,69 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(15, 10, 0, 10),
-              child: Text(
-                "Top Podcasts",
-                style: GoogleFonts.robotoCondensed(
-                    fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-              alignment: Alignment.centerLeft,
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              height: 250.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  FutureBuilder(
-                      future: futureBestPod,
-                      builder: (context, snapshot) {
-                        return snapshot.hasData
-                            ? ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemCount: snapshot.data['podcasts'].length,
-                                itemBuilder: (_, int position) {
-                                  final item =
-                                      snapshot.data['podcasts'][position];
-                                  return podcastBlock(
-                                      context, item['image'], item['title'],
-                                      publisher: item['publisher']);
-                                },
-                              )
-                            : Center(
-                                child: CircularProgressIndicator(),
-                              );
-                      }),
-                ],
-              ),
-            ),
-          ],
-        ),
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.purple,
+        onTap: _onItemTapped,
       ),
     );
   }
+}
+
+Widget podcastHome() {
+  Future<Map<String, dynamic>> futureBestPod = fetchBestPodcasts();
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: <Widget>[
+      Container(
+        margin: EdgeInsets.fromLTRB(15, 10, 0, 10),
+        child: Text(
+          "Top Podcasts",
+          style: GoogleFonts.robotoCondensed(
+              fontSize: 28, fontWeight: FontWeight.bold),
+        ),
+        alignment: Alignment.centerLeft,
+      ),
+      Container(
+        alignment: Alignment.topLeft,
+        height: 250.0,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          children: <Widget>[
+            FutureBuilder(
+                future: futureBestPod,
+                builder: (context, snapshot) {
+                  return snapshot.hasData
+                      ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          itemCount: snapshot.data['podcasts'].length,
+                          itemBuilder: (_, int position) {
+                            final item = snapshot.data['podcasts'][position];
+                            return podcastBlock(
+                                context, item['image'], item['title'],
+                                publisher: item['publisher']);
+                          },
+                        )
+                      : Center(
+                          child: CircularProgressIndicator(),
+                        );
+                }),
+          ],
+        ),
+      ),
+    ],
+  );
 }
