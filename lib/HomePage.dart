@@ -14,6 +14,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  List<Widget> _widgetOptions;
+  Future<Map<String, dynamic>> futureBestPod;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,12 +26,14 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-  }
 
-  List<Widget> _widgetOptions = <Widget>[
-    podcastHome(),
-    Text('Index 1: Business'),
-  ];
+    futureBestPod = fetchBestPodcasts();
+
+    _widgetOptions = <Widget>[
+      podcastHome(futureBestPod),
+      Text('Index 1: Business'),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +70,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget podcastHome() {
-  Future<Map<String, dynamic>> futureBestPod = fetchBestPodcasts();
+Widget podcastHome(Future<Map<String, dynamic>> data) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
@@ -87,7 +90,7 @@ Widget podcastHome() {
           scrollDirection: Axis.horizontal,
           children: <Widget>[
             FutureBuilder(
-                future: futureBestPod,
+                future: data,
                 builder: (context, snapshot) {
                   return snapshot.hasData
                       ? ListView.builder(
