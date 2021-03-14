@@ -18,6 +18,7 @@ class MyCard extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => PodcastListPage(
+                      "123",
                       title: "PodQast",
                     )),
           );

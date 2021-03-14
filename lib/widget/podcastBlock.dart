@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/PodcastListPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget podcastBlock(BuildContext context, String imageUrl, String title,
-    {String genre, String publisher}) {
+Widget podcastBlock(
+    BuildContext context, String id, String imageUrl, String title,
+    {String genre, String publisher, String description}) {
   return InkWell(
     splashColor: Colors.blue.withAlpha(30),
     onTap: () {
@@ -12,7 +13,12 @@ Widget podcastBlock(BuildContext context, String imageUrl, String title,
         context,
         MaterialPageRoute(
             builder: (context) => PodcastListPage(
-                  title: "PodQast",
+                  id,
+                  title: title,
+                  imageUrl: imageUrl,
+                  publisher: publisher,
+                  genre: genre,
+                  description: description,
                 )),
       );
     },

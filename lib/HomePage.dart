@@ -99,9 +99,10 @@ Widget podcastHome(Future<Map<String, dynamic>> data) {
                           itemCount: snapshot.data['podcasts'].length,
                           itemBuilder: (_, int position) {
                             final item = snapshot.data['podcasts'][position];
-                            return podcastBlock(
-                                context, item['image'], item['title'],
-                                publisher: item['publisher']);
+                            return podcastBlock(context, item['id'],
+                                item['image'], item['title'],
+                                publisher: item['publisher'],
+                                description: item['description']);
                           },
                         )
                       : Center(
