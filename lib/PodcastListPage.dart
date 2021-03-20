@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controller/PodcastController.dart';
+import 'package:flutter_application_1/util/StringUtil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PodcastListPage extends StatefulWidget {
   PodcastListPage(this.id,
@@ -7,7 +9,7 @@ class PodcastListPage extends StatefulWidget {
       this.title,
       this.imageUrl,
       this.publisher,
-      this.genre,
+      this.genreIds,
       this.description})
       : super(key: key);
 
@@ -15,7 +17,7 @@ class PodcastListPage extends StatefulWidget {
   final String title;
   final String imageUrl;
   final String publisher;
-  final String genre;
+  final List genreIds;
   final String description;
 
   @override
@@ -26,6 +28,8 @@ class _PodcastListPageState extends State<PodcastListPage> {
   Future<Map<String, dynamic>> podcastEpisodeList;
   String title = "";
   String imageUrl = "";
+  String description = "";
+  String publisher = "";
 
   @override
   void initState() {
@@ -33,28 +37,89 @@ class _PodcastListPageState extends State<PodcastListPage> {
     podcastEpisodeList = fetchPodcastListById(widget.id);
     title = widget.title;
     imageUrl = widget.imageUrl;
+    description = widget.description;
+    publisher = widget.publisher;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            title,
-            style: TextStyle(color: Colors.black),
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(35.0),
+          child: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
+            backgroundColor: Colors.white,
+            elevation: 0,
           ),
-          iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white,
-          elevation: 0,
         ),
         body: Column(
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-              child: ClipRRect(
-                child: Image(
-                  image: NetworkImage(imageUrl),
+            Row(
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10.0),
+                  width: 150.0,
+                  child: ClipRRect(
+                    child: Image(
+                      image: NetworkImage(imageUrl),
+                    ),
+                  ),
                 ),
+                Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      width: 200,
+                      child: Text(
+                        StringUtil.parseHtmlString(title),
+                        style: GoogleFonts.robotoCondensed(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
+                      ),
+                    ),
+                    Container(
+                      width: 200,
+                      child: Text(
+                        // StringUtil.parseHtmlString(description),
+                        publisher,
+                        style: GoogleFonts.robotoCondensed(
+                            fontSize: 16, color: Colors.black),
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 4,
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.all(10),
+              child: OutlinedButton(
+                onPressed: () {},
+                child: Text(
+                  "SUBSCRIBE",
+                  style: GoogleFonts.robotoCondensed(
+                      fontSize: 16, color: Colors.black),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: Text(
+                StringUtil.parseHtmlString(description),
+                style: GoogleFonts.robotoCondensed(
+                    fontSize: 16, color: Colors.black),
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 7,
               ),
             )
           ],

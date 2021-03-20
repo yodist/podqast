@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Widget podcastBlock(
     BuildContext context, String id, String imageUrl, String title,
-    {String genre, String publisher, String description}) {
+    {List genreIds, String publisher, String description}) {
   return InkWell(
     splashColor: Colors.blue.withAlpha(30),
     onTap: () {
@@ -17,7 +17,7 @@ Widget podcastBlock(
                   title: title,
                   imageUrl: imageUrl,
                   publisher: publisher,
-                  genre: genre,
+                  genreIds: genreIds,
                   description: description,
                 )),
       );

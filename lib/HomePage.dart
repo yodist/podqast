@@ -102,7 +102,8 @@ Widget podcastHome(Future<Map<String, dynamic>> data) {
                             return podcastBlock(context, item['id'],
                                 item['image'], item['title'],
                                 publisher: item['publisher'],
-                                description: item['description']);
+                                description: item['description'],
+                                genreIds: item['genreIds']);
                           },
                         )
                       : Center(
