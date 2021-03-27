@@ -3,6 +3,7 @@ import 'package:flutter_application_1/component/EpisodeCard.dart';
 import 'package:flutter_application_1/controller/PodcastController.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class PodcastListPage extends StatefulWidget {
   PodcastListPage(this.id,
@@ -141,10 +142,19 @@ class _PodcastListPageState extends State<PodcastListPage> {
                             itemCount: snapshot.data['episodes'].length,
                             itemBuilder: (_, int position) {
                               final item = snapshot.data['episodes'][position];
+                              var dateFormatter = DateFormat("dd MMM ''yy");
+                              var releaseDate = dateFormatter.format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      item['pub_date_ms']));
+                              var duration = StringUtil.formatDurationHHmm(
+                                  item['audio_length_sec']);
+
                               return EpisodeCard(
                                 iconUrl: item['thumbnail'],
                                 title: item['title'],
                                 subtitle: item['description'],
+                                releaseDate: releaseDate,
+                                duration: duration,
                               );
                             },
                           )

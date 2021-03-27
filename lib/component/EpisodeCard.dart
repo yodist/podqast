@@ -3,12 +3,20 @@ import 'package:flutter_application_1/PodcastDetailPage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EpisodeCard extends StatelessWidget {
-  EpisodeCard({Key key, this.iconUrl, this.title, this.subtitle})
+  EpisodeCard(
+      {Key key,
+      this.iconUrl,
+      this.title,
+      this.subtitle,
+      this.duration,
+      this.releaseDate})
       : super(key: key);
 
   final String iconUrl;
   final String title;
   final String subtitle;
+  final String releaseDate;
+  final String duration;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,7 @@ class EpisodeCard extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  "12 Mar '21",
+                  this.releaseDate,
                   style: GoogleFonts.robotoCondensed(
                       fontSize: 16, color: Colors.black),
                 ),
@@ -52,7 +60,7 @@ class EpisodeCard extends StatelessWidget {
                   width: 20,
                 ),
                 Text(
-                  "30:59",
+                  this.duration,
                   style: GoogleFonts.robotoCondensed(
                       fontSize: 16,
                       color: Colors.black,
