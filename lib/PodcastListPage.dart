@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/EpisodeCard.dart';
 import 'package:flutter_application_1/controller/PodcastController.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,6 +46,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(35.0),
           child: AppBar(
@@ -53,76 +55,108 @@ class _PodcastListPageState extends State<PodcastListPage> {
             elevation: 0,
           ),
         ),
-        body: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10.0),
-                  width: 150.0,
-                  child: ClipRRect(
-                    child: Image(
-                      image: NetworkImage(imageUrl),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10.0),
+                    width: 150.0,
+                    child: ClipRRect(
+                      child: Image(
+                        image: NetworkImage(imageUrl),
+                      ),
                     ),
                   ),
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        width: 200,
+                        child: Text(
+                          StringUtil.parseHtmlString(title),
+                          style: GoogleFonts.robotoCondensed(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                        ),
+                      ),
+                      Container(
+                        width: 200,
+                        child: Text(
+                          // StringUtil.parseHtmlString(description),
+                          publisher,
+                          style: GoogleFonts.robotoCondensed(
+                              fontSize: 16, color: Colors.black),
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 4,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.all(10),
+                child: OutlinedButton(
+                  onPressed: () {},
+                  child: Text(
+                    "SUBSCRIBE",
+                    style: GoogleFonts.robotoCondensed(
+                        fontSize: 16, color: Colors.black),
+                  ),
                 ),
-                Column(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      width: 200,
-                      child: Text(
-                        StringUtil.parseHtmlString(title),
-                        style: GoogleFonts.robotoCondensed(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                        softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                      ),
-                    ),
-                    Container(
-                      width: 200,
-                      child: Text(
-                        // StringUtil.parseHtmlString(description),
-                        publisher,
-                        style: GoogleFonts.robotoCondensed(
-                            fontSize: 16, color: Colors.black),
-                        softWrap: false,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 4,
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.all(10),
-              child: OutlinedButton(
-                onPressed: () {},
+              ),
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                 child: Text(
-                  "SUBSCRIBE",
+                  StringUtil.parseHtmlString(description),
                   style: GoogleFonts.robotoCondensed(
                       fontSize: 16, color: Colors.black),
+                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 7,
                 ),
               ),
-            ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-              child: Text(
-                StringUtil.parseHtmlString(description),
-                style: GoogleFonts.robotoCondensed(
-                    fontSize: 16, color: Colors.black),
-                softWrap: false,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 7,
-              ),
-            )
-          ],
+              // Expanded(
+              // child: SizedBox(
+              //   height: 200.0,
+              // child:
+              // Flexible(
+              // child:
+              FutureBuilder(
+                  future: podcastEpisodeList,
+                  builder: (context, snapshot) {
+                    return snapshot.hasData
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: snapshot.data['episodes'].length,
+                            itemBuilder: (_, int position) {
+                              final item = snapshot.data['episodes'][position];
+                              return EpisodeCard(
+                                iconUrl: item['thumbnail'],
+                                title: item['title'],
+                                subtitle: item['description'],
+                              );
+                            },
+                          )
+                        : Center(
+                            child: CircularProgressIndicator(),
+                          );
+                  }),
+              // ),
+              // ),
+              // )
+            ],
+          ),
         ));
   }
 }
