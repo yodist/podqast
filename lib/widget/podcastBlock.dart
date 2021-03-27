@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Widget podcastBlock(
     BuildContext context, String id, String imageUrl, String title,
-    {List genreIds, String publisher, String description}) {
+    {List? genreIds, String publisher = "", String description = ""}) {
   return InkWell(
     splashColor: Colors.blue.withAlpha(30),
     onTap: () {
@@ -50,7 +50,7 @@ Widget podcastBlock(
           margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
           width: 150.0,
           child: Text(
-            publisher != null ? publisher : '',
+            publisher,
             style: GoogleFonts.robotoCondensed(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,

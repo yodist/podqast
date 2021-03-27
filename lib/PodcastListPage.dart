@@ -7,19 +7,19 @@ import 'package:intl/intl.dart';
 
 class PodcastListPage extends StatefulWidget {
   PodcastListPage(this.id,
-      {Key key,
-      this.title,
-      this.imageUrl,
-      this.publisher,
+      {Key? key,
+      this.title = "",
+      this.imageUrl = "",
+      this.publisher = "",
       this.genreIds,
-      this.description})
+      this.description = ""})
       : super(key: key);
 
   final String id;
   final String title;
   final String imageUrl;
   final String publisher;
-  final List genreIds;
+  final List? genreIds;
   final String description;
 
   @override
@@ -27,7 +27,7 @@ class PodcastListPage extends StatefulWidget {
 }
 
 class _PodcastListPageState extends State<PodcastListPage> {
-  Future<Map<String, dynamic>> podcastEpisodeList;
+  late Future<Map<String, dynamic>> podcastEpisodeList;
   String title = "";
   String imageUrl = "";
   String description = "";
@@ -139,9 +139,11 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         ? ListView.builder(
                             shrinkWrap: true,
                             primary: false,
-                            itemCount: snapshot.data['episodes'].length,
+                            itemCount:
+                                (snapshot.data! as Map)['episodes'].length,
                             itemBuilder: (_, int position) {
-                              final item = snapshot.data['episodes'][position];
+                              var snapshotDate = (snapshot.data! as Map);
+                              final item = snapshotDate['episodes'][position];
                               var dateFormatter = DateFormat("dd MMM ''yy");
                               var releaseDate = dateFormatter.format(
                                   DateTime.fromMillisecondsSinceEpoch(

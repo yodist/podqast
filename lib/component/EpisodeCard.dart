@@ -4,12 +4,12 @@ import 'package:google_fonts/google_fonts.dart';
 
 class EpisodeCard extends StatelessWidget {
   EpisodeCard(
-      {Key key,
-      this.iconUrl,
-      this.title,
-      this.subtitle,
-      this.duration,
-      this.releaseDate})
+      {Key? key,
+      required this.iconUrl,
+      required this.title,
+      this.subtitle = "",
+      required this.duration,
+      required this.releaseDate})
       : super(key: key);
 
   final String iconUrl;

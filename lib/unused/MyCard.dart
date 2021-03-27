@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/PodcastListPage.dart';
 
 class MyCard extends StatelessWidget {
-  MyCard({Key key, this.iconUrl, this.title, this.subtitle}) : super(key: key);
+  MyCard(
+      {Key? key,
+      required this.iconUrl,
+      required this.title,
+      this.subtitle = ""})
+      : super(key: key);
 
   final String iconUrl;
   final String title;

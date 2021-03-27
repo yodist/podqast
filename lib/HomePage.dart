@@ -4,7 +4,7 @@ import 'package:flutter_application_1/widget/podcastBlock.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+  HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -14,8 +14,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  List<Widget> _widgetOptions;
-  Future<Map<String, dynamic>> futureBestPod;
+  late List<Widget> _widgetOptions;
+  late Future<Map<String, dynamic>> futureBestPod;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -96,9 +96,10 @@ Widget podcastHome(Future<Map<String, dynamic>> data) {
                       ? ListView.builder(
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          itemCount: snapshot.data['podcasts'].length,
+                          itemCount: (snapshot.data! as Map)['podcasts'].length,
                           itemBuilder: (_, int position) {
-                            final item = snapshot.data['podcasts'][position];
+                            var snapshotData = (snapshot.data! as Map);
+                            final item = snapshotData['podcasts'][position];
                             return podcastBlock(context, item['id'],
                                 item['image'], item['title'],
                                 publisher: item['publisher'],
