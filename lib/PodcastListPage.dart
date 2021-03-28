@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/EpisodeCard.dart';
 import 'package:flutter_application_1/controller/PodcastController.dart';
+import 'package:flutter_application_1/util/FileUtil.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -77,13 +78,13 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         width: 200,
                         child: Text(
                           StringUtil.parseHtmlString(title),
-                          style: GoogleFonts.robotoCondensed(
-                              fontSize: 18,
+                          style: GoogleFonts.openSans(
+                              fontSize: 24,
                               color: Colors.black,
                               fontWeight: FontWeight.bold),
                           softWrap: false,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
+                          maxLines: 5,
                         ),
                       ),
                       Container(
@@ -91,8 +92,8 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         child: Text(
                           // StringUtil.parseHtmlString(description),
                           publisher,
-                          style: GoogleFonts.robotoCondensed(
-                              fontSize: 16, color: Colors.black),
+                          style: GoogleFonts.openSans(
+                              fontSize: 18, color: Colors.black),
                           softWrap: false,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 4,
@@ -119,8 +120,8 @@ class _PodcastListPageState extends State<PodcastListPage> {
                 margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
                 child: Text(
                   StringUtil.parseHtmlString(description),
-                  style: GoogleFonts.robotoCondensed(
-                      fontSize: 16, color: Colors.black),
+                  style:
+                      GoogleFonts.openSans(fontSize: 16, color: Colors.black),
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 7,
@@ -144,6 +145,10 @@ class _PodcastListPageState extends State<PodcastListPage> {
                             itemBuilder: (_, int position) {
                               var snapshotDate = (snapshot.data! as Map);
                               final item = snapshotDate['episodes'][position];
+                              String audioUrl = item['audio'];
+                              String fileSize =
+                                  FileUtil.checkFileSizeFromUri(audioUrl);
+
                               var dateFormatter = DateFormat("dd MMM ''yy");
                               var releaseDate = dateFormatter.format(
                                   DateTime.fromMillisecondsSinceEpoch(
@@ -151,13 +156,15 @@ class _PodcastListPageState extends State<PodcastListPage> {
                               var duration = StringUtil.formatDurationHHmm(
                                   item['audio_length_sec']);
 
-                              return EpisodeCard(
-                                iconUrl: item['thumbnail'],
-                                title: item['title'],
-                                subtitle: item['description'],
-                                releaseDate: releaseDate,
-                                duration: duration,
-                              );
+                              return EpisodeCard(item['id'],
+                                  iconUrl: item['thumbnail'],
+                                  imageUrl: item['image'],
+                                  podcastTitle: this.title,
+                                  title: item['title'],
+                                  subtitle: item['description'],
+                                  releaseDate: releaseDate,
+                                  duration: duration,
+                                  fileSize: fileSize);
                             },
                           )
                         : Center(

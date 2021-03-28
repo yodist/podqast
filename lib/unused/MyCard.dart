@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/PodcastListPage.dart';
+import 'package:flutter_application_1/util/StringUtil.dart';
 
 class MyCard extends StatelessWidget {
   MyCard(
@@ -38,7 +39,7 @@ class MyCard extends StatelessWidget {
               ),
               title: Text(title),
               subtitle: Text(
-                subtitle,
+                StringUtil.parseHtmlString(subtitle),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),

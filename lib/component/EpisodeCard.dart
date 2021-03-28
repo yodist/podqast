@@ -1,22 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/PlayerPage.dart';
 import 'package:flutter_application_1/PodcastDetailPage.dart';
+import 'package:flutter_application_1/util/StringUtil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EpisodeCard extends StatelessWidget {
   EpisodeCard(
-      {Key? key,
-      required this.iconUrl,
-      required this.title,
-      this.subtitle = "",
-      required this.duration,
-      required this.releaseDate})
-      : super(key: key);
+    this.episodeId, {
+    Key? key,
+    required this.iconUrl,
+    required this.podcastTitle,
+    required this.title,
+    this.subtitle = "",
+    required this.imageUrl,
+    required this.duration,
+    required this.releaseDate,
+    this.publisher = "",
+    this.fileSize = "0 MB",
+  }) : super(key: key);
 
+  final String episodeId;
   final String iconUrl;
+  final String imageUrl;
+  final String podcastTitle;
   final String title;
   final String subtitle;
   final String releaseDate;
   final String duration;
+  final String publisher;
+  final String fileSize;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +38,18 @@ class EpisodeCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => PodcastDetailPage()),
+            MaterialPageRoute(
+                builder: (context) => PodcastDetailPage(
+                      this.episodeId,
+                      title: this.title,
+                      description: this.subtitle,
+                      imageUrl: this.imageUrl,
+                      publisher: this.publisher,
+                      podcastTitle: this.podcastTitle,
+                      releaseDate: this.releaseDate,
+                      duration: this.duration,
+                      fileSize: this.fileSize,
+                    )),
           );
         },
         child: Column(
@@ -40,7 +63,7 @@ class EpisodeCard extends StatelessWidget {
               ),
               title: Text(title),
               subtitle: Text(
-                subtitle,
+                StringUtil.parseHtmlString(subtitle),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -75,7 +98,12 @@ class EpisodeCard extends StatelessWidget {
                     Icons.play_circle_outline,
                     size: 30,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PlayerPage()),
+                    );
+                  },
                 ),
                 SizedBox(
                   width: 20,

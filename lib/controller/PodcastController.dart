@@ -14,7 +14,7 @@ Future<Map<String, dynamic>> fetchBestPodcasts() async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return jsonDecode(response.body);
+    return jsonDecode(utf8.decode(response.bodyBytes));
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
@@ -55,7 +55,7 @@ Future<Map<String, dynamic>> fetchPodcastListById(String id) async {
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return jsonDecode(response.body);
+    return jsonDecode(utf8.decode(response.bodyBytes));
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
