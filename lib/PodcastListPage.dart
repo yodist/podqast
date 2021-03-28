@@ -49,7 +49,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(35.0),
+          preferredSize: Size.fromHeight(50.0),
           child: AppBar(
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Colors.white,
