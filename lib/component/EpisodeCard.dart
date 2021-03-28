@@ -5,19 +5,19 @@ import 'package:flutter_application_1/util/StringUtil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class EpisodeCard extends StatelessWidget {
-  EpisodeCard(
-    this.episodeId, {
-    Key? key,
-    required this.iconUrl,
-    required this.podcastTitle,
-    required this.title,
-    this.subtitle = "",
-    required this.imageUrl,
-    required this.duration,
-    required this.releaseDate,
-    this.publisher = "",
-    this.fileSize = "0 MB",
-  }) : super(key: key);
+  EpisodeCard(this.episodeId,
+      {Key? key,
+      required this.iconUrl,
+      required this.podcastTitle,
+      required this.title,
+      this.subtitle = "",
+      required this.imageUrl,
+      required this.duration,
+      required this.releaseDate,
+      this.publisher = "",
+      this.fileSize = "0 MB",
+      required this.audioUri})
+      : super(key: key);
 
   final String episodeId;
   final String iconUrl;
@@ -29,6 +29,7 @@ class EpisodeCard extends StatelessWidget {
   final String duration;
   final String publisher;
   final String fileSize;
+  final String audioUri;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +102,13 @@ class EpisodeCard extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PlayerPage()),
+                      MaterialPageRoute(
+                          builder: (context) => PlayerPage(
+                                audioUri: this.audioUri,
+                                album: this.publisher,
+                                artwork: this.imageUrl,
+                                title: this.title,
+                              )),
                     );
                   },
                 ),

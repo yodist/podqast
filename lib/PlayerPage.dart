@@ -9,28 +9,52 @@ import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
 class PlayerPage extends StatefulWidget {
+  PlayerPage({
+    Key? key,
+    required this.audioUri,
+    required this.album,
+    required this.title,
+    required this.artwork,
+  });
+
+  final String audioUri;
+  final String album;
+  final String title;
+  final String artwork;
+
   @override
   _PlayerPageState createState() => _PlayerPageState();
 }
 
 class _PlayerPageState extends State<PlayerPage> {
+  String audioUri = "";
+  String album = "";
+  String title = "";
+  String artwork = "";
+
   late AudioPlayer _player;
-  final _playlist = ConcatenatingAudioSource(children: [
-    AudioSource.uri(
-      Uri.parse(
-          "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3"),
-      tag: AudioMetadata(
-        album: "Science Friday",
-        title: "A Salute To Head-Scratching Science",
-        artwork:
-            "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
-      ),
-    ),
-  ]);
+  late ConcatenatingAudioSource _playlist;
 
   @override
   void initState() {
     super.initState();
+
+    audioUri = widget.audioUri;
+    title = widget.title;
+    album = widget.album;
+    artwork = widget.artwork;
+
+    _playlist = ConcatenatingAudioSource(children: [
+      AudioSource.uri(
+        Uri.parse(audioUri),
+        tag: AudioMetadata(
+          album: album,
+          title: title,
+          artwork: artwork,
+        ),
+      ),
+    ]);
+
     _player = AudioPlayer();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.black,

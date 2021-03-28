@@ -156,15 +156,18 @@ class _PodcastListPageState extends State<PodcastListPage> {
                               var duration = StringUtil.formatDurationHHmm(
                                   item['audio_length_sec']);
 
-                              return EpisodeCard(item['id'],
-                                  iconUrl: item['thumbnail'],
-                                  imageUrl: item['image'],
-                                  podcastTitle: this.title,
-                                  title: item['title'],
-                                  subtitle: item['description'],
-                                  releaseDate: releaseDate,
-                                  duration: duration,
-                                  fileSize: fileSize);
+                              return EpisodeCard(
+                                item['id'],
+                                iconUrl: item['thumbnail'],
+                                imageUrl: item['image'],
+                                podcastTitle: this.title,
+                                title: item['title'],
+                                subtitle: item['description'],
+                                releaseDate: releaseDate,
+                                duration: duration,
+                                fileSize: fileSize,
+                                audioUri: audioUrl,
+                              );
                             },
                           )
                         : Center(

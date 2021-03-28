@@ -139,6 +139,15 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> {
             ),
           ),
           Container(
+            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                image: NetworkImage(imageUrl),
+              ),
+            ),
+          ),
+          Container(
             alignment: Alignment.topLeft,
             margin: EdgeInsets.all(5),
             child: Html(
@@ -148,13 +157,6 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> {
                   fontSize: FontSize.larger,
                 )
               },
-            ),
-          ),
-          Container(
-            child: ClipRRect(
-              child: Image(
-                image: NetworkImage(imageUrl),
-              ),
             ),
           ),
           Row(
