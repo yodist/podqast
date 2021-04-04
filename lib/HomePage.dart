@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/controller/PodcastController.dart';
+import 'package:flutter_application_1/widget/PodcastSearch.dart';
 import 'package:flutter_application_1/widget/podcastHome.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late PageController _pageController;
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions;
   late Future<Map<String, dynamic>> futureBestPod;
@@ -19,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 250), curve: Curves.ease);
     });
   }
 
@@ -26,12 +30,19 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    _pageController = PageController();
     futureBestPod = fetchBestPodcasts();
 
     _widgetOptions = <Widget>[
       podcastHome(futureBestPod),
-      Text('Index 1: Business'),
+      PodcastSearch(),
     ];
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,9 +58,16 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.white,
         ),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: SizedBox.expand(
+          child: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        children: _widgetOptions,
+      )),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
