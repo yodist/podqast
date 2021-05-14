@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/EpisodeCard.dart';
-import 'package:flutter_application_1/controller/PodcastController.dart';
+import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/util/FileUtil.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -28,7 +30,9 @@ class PodcastListPage extends StatefulWidget {
 }
 
 class _PodcastListPageState extends State<PodcastListPage> {
-  late Future<Map<String, dynamic>> podcastEpisodeList;
+  PodcastService podcastService = new PodcastService();
+
+  late Future<Map<String, dynamic>> podcastData;
   String title = "";
   String imageUrl = "";
   String description = "";
@@ -37,7 +41,8 @@ class _PodcastListPageState extends State<PodcastListPage> {
   @override
   void initState() {
     super.initState();
-    podcastEpisodeList = fetchPodcastListById(widget.id);
+    podcastData = podcastService.fetchPodcastListById(widget.id);
+
     title = widget.title;
     imageUrl = widget.imageUrl;
     description = widget.description;
@@ -60,49 +65,62 @@ class _PodcastListPageState extends State<PodcastListPage> {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10.0),
-                    width: 150.0,
-                    child: ClipRRect(
-                      child: Image(
-                        image: NetworkImage(imageUrl),
-                      ),
-                    ),
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        width: 200,
-                        child: Text(
-                          StringUtil.parseHtmlString(title),
-                          style: GoogleFonts.openSans(
-                              fontSize: 24,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 5,
-                        ),
-                      ),
-                      Container(
-                        width: 200,
-                        child: Text(
-                          // StringUtil.parseHtmlString(description),
-                          publisher,
-                          style: GoogleFonts.openSans(
-                              fontSize: 18, color: Colors.black),
-                          softWrap: false,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 4,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+              FutureBuilder(
+                  future: podcastData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var snapshotData = (snapshot.data! as Map);
+                      return Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10.0),
+                            width: 150.0,
+                            child: ClipRRect(
+                              child: Image(
+                                image: NetworkImage(snapshotData['image']),
+                              ),
+                            ),
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                width: 200,
+                                child: Text(
+                                  StringUtil.parseHtmlString(
+                                      snapshotData['title']),
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 24,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                  softWrap: false,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 5,
+                                ),
+                              ),
+                              Container(
+                                width: 200,
+                                child: Text(
+                                  // StringUtil.parseHtmlString(description),
+                                  snapshotData['publisher'],
+                                  style: GoogleFonts.openSans(
+                                      fontSize: 18, color: Colors.black),
+                                  softWrap: false,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 4,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
+
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.all(10),
@@ -115,26 +133,35 @@ class _PodcastListPageState extends State<PodcastListPage> {
                   ),
                 ),
               ),
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                child: Text(
-                  StringUtil.parseHtmlString(description),
-                  style:
-                      GoogleFonts.openSans(fontSize: 16, color: Colors.black),
-                  softWrap: false,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 7,
-                ),
-              ),
-              // Expanded(
-              // child: SizedBox(
-              //   height: 200.0,
-              // child:
-              // Flexible(
-              // child:
               FutureBuilder(
-                  future: podcastEpisodeList,
+                  future: podcastData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        child: Html(
+                          data: (snapshot.data! as Map)['description'],
+                          style: {"*": Style(fontSize: FontSize.large)},
+                        ),
+                        // child: Text(
+                        //   StringUtil.parseHtmlString(
+                        //       (snapshot.data! as Map)['description']),
+                        //   style: GoogleFonts.openSans(
+                        //       fontSize: 16, color: Colors.black),
+                        //   softWrap: false,
+                        //   overflow: TextOverflow.ellipsis,
+                        //   maxLines: 7,
+                        // ),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
+              FutureBuilder(
+                  future: podcastData,
                   builder: (context, snapshot) {
                     return snapshot.hasData
                         ? ListView.builder(

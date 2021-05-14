@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controller/PodcastController.dart';
+import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/widget/PodcastSearch.dart';
 import 'package:flutter_application_1/widget/podcastHome.dart';
 
@@ -13,6 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  PodcastService podcastService = PodcastService();
+
   late PageController _pageController;
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions;
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _pageController = PageController();
-    futureBestPod = fetchBestPodcasts();
+    futureBestPod = podcastService.fetchBestPodcasts();
 
     _widgetOptions = <Widget>[
       podcastHome(futureBestPod),

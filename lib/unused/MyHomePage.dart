@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/controller/PodcastController.dart';
+import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/unused/MyCard.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -13,12 +13,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Future<Map<String, dynamic>> futureBestPod;
+  PodcastService podcastService = new PodcastService();
   List<Widget> myCardList = [];
 
   @override
   void initState() {
     super.initState();
-    futureBestPod = fetchBestPodcasts();
+    futureBestPod = podcastService.fetchBestPodcasts();
   }
 
   @override
