@@ -6,12 +6,11 @@ class PodcastService {
   Future<Map<String, dynamic>> fetchBestPodcasts() async {
     String key =
         await ConfigUtil.getConfigData().then((value) => value['listenKey']);
-    final response = await http.get(
-        Uri.parse(
-            'https://listen-api-test.listennotes.com/api/v2/best_podcasts'),
-        headers: {
-          'X-ListenAPI-Key': key,
-        });
+    String baseUrl = await getBaseUrl();
+    final response =
+        await http.get(Uri.parse(baseUrl + '/best_podcasts'), headers: {
+      'X-ListenAPI-Key': key,
+    });
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -27,11 +26,10 @@ class PodcastService {
   Future<Map<String, dynamic>> fetchGenres() async {
     String key =
         await ConfigUtil.getConfigData().then((value) => value['listenKey']);
-    final response = await http.get(
-        Uri.parse('https://listen-api-test.listennotes.com/api/v2/genres'),
-        headers: {
-          'X-ListenAPI-Key': key,
-        });
+    String baseUrl = await getBaseUrl();
+    final response = await http.get(Uri.parse(baseUrl + '/genres'), headers: {
+      'X-ListenAPI-Key': key,
+    });
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -47,12 +45,11 @@ class PodcastService {
   Future<Map<String, dynamic>> fetchPodcastListById(String id) async {
     String key =
         await ConfigUtil.getConfigData().then((value) => value['listenKey']);
-    final response = await http.get(
-        Uri.parse(
-            'https://listen-api-test.listennotes.com/api/v2/podcasts/' + id),
-        headers: {
-          'X-ListenAPI-Key': key,
-        });
+    String baseUrl = await getBaseUrl();
+    final response =
+        await http.get(Uri.parse(baseUrl + '/podcasts/' + id), headers: {
+      'X-ListenAPI-Key': key,
+    });
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -68,12 +65,11 @@ class PodcastService {
   Future<List<Map<String, dynamic>>> getSuggestions(String pattern) async {
     String key =
         await ConfigUtil.getConfigData().then((value) => value['listenKey']);
+    String baseUrl = await getBaseUrl();
     final response = await http.get(
       // Uri.https("listen-api-test.listennotes.com", "/api/v2/typeahead",
       //     {"q": pattern, "show_podcasts": 3}),
-      Uri.parse("https://listen-api-test.listennotes.com/api/v2/typeahead?q=" +
-          pattern +
-          "&show_podcasts=3"),
+      Uri.parse(baseUrl + "/typeahead?q=" + pattern + "&show_podcasts=3"),
       headers: {
         'X-ListenAPI-Key': key,
       },
@@ -91,6 +87,19 @@ class PodcastService {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to typeahead');
+    }
+  }
+
+  Future<String> getBaseUrl() async {
+    bool production = false;
+    await ConfigUtil.getConfigData().then((value) {
+      production = value['production'];
+    });
+
+    if (production) {
+      return "https://listen-api.listennotes.com/api/v2";
+    } else {
+      return "https://listen-api-test.listennotes.com/api/v2";
     }
   }
 }
