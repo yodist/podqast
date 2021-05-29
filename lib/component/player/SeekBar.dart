@@ -8,14 +8,14 @@ import 'package:flutter_application_1/component/player/HiddenThumbComponentShape
 class SeekBar extends StatefulWidget {
   final Duration duration;
   final Duration position;
-  final Duration bufferedPosition;
+  final Duration? bufferedPosition;
   final ValueChanged<Duration>? onChanged;
   final ValueChanged<Duration>? onChangeEnd;
 
   SeekBar({
     required this.duration,
     required this.position,
-    required this.bufferedPosition,
+    this.bufferedPosition,
     this.onChanged,
     this.onChangeEnd,
   });
@@ -51,7 +51,7 @@ class _SeekBarState extends State<SeekBar> {
             child: Slider(
               min: 0.0,
               max: widget.duration.inMilliseconds.toDouble(),
-              value: widget.bufferedPosition.inMilliseconds.toDouble(),
+              value: widget.bufferedPosition!.inMilliseconds.toDouble(),
               onChanged: (value) {
                 setState(() {
                   _dragValue = value;

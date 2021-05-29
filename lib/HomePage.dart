@@ -1,4 +1,6 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/audio_service/AudioPlayerTask.dart';
 import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/widget/PodcastSearch.dart';
 import 'package:flutter_application_1/widget/podcastHome.dart';
@@ -87,4 +89,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+// NOTE: Your entrypoint MUST be a top-level function.
+void _audioPlayerTaskEntrypoint() async {
+  AudioServiceBackground.run(() => AudioPlayerTask());
 }
