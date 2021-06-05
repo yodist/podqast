@@ -30,8 +30,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void initAudioService() async {
+    await AudioService.connect();
+  }
+
   @override
   void initState() {
+    initAudioService();
     super.initState();
 
     _pageController = PageController();
@@ -45,6 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    AudioService.disconnect();
     _pageController.dispose();
     super.dispose();
   }
@@ -89,9 +95,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-// NOTE: Your entrypoint MUST be a top-level function.
-void _audioPlayerTaskEntrypoint() async {
-  AudioServiceBackground.run(() => AudioPlayerTask());
 }

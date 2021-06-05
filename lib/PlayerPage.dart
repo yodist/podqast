@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/component/player/ControlButtons.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_application_1/model/AudioMetadata.dart';
 import 'package:flutter_application_1/model/PositionData.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
+
+import 'component/audio_service/AudioPlayerTask.dart';
 
 class PlayerPage extends StatefulWidget {
   PlayerPage({
@@ -32,7 +35,7 @@ class _PlayerPageState extends State<PlayerPage> {
   String title = "";
   String artwork = "";
 
-  late AudioPlayer _player;
+  // late AudioPlayer _player;
   late ConcatenatingAudioSource _playlist;
 
   @override
@@ -55,27 +58,27 @@ class _PlayerPageState extends State<PlayerPage> {
       ),
     ]);
 
-    _player = AudioPlayer();
+    // _player = AudioPlayer();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.black,
     ));
-    _init();
+    // _init();
   }
 
-  Future<void> _init() async {
-    final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.speech());
-    try {
-      await _player.setAudioSource(_playlist);
-    } catch (e) {
-      // catch load errors: 404, invalid url ...
-      print("An error occured $e");
-    }
-  }
+  // Future<void> _init() async {
+  //   final session = await AudioSession.instance;
+  //   await session.configure(AudioSessionConfiguration.speech());
+  //   try {
+  //     await _player.setAudioSource(_playlist);
+  //   } catch (e) {
+  //     // catch load errors: 404, invalid url ...
+  //     print("An error occured $e");
+  //   }
+  // }
 
   @override
   void dispose() {
-    _player.dispose();
+    // _player.dispose();
     super.dispose();
   }
 
@@ -257,4 +260,8 @@ class _PlayerPageState extends State<PlayerPage> {
       ),
     );
   }
+}
+
+void _audioPlayerTaskEntrypoint() async {
+  AudioServiceBackground.run(() => AudioPlayerTask());
 }

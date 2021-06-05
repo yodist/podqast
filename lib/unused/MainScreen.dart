@@ -8,7 +8,7 @@ import 'package:flutter_application_1/component/audio_service/AudioPlayerTask.da
 import 'package:flutter_application_1/component/audio_service/MediaState.dart';
 import 'package:flutter_application_1/component/audio_service/QueueState.dart';
 import 'package:flutter_application_1/component/audio_service/TextPlayerTask.dart';
-import 'package:flutter_application_1/component/player/SeekBar.dart';
+import 'package:flutter_application_1/component/audio_service/SeekBar2.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MainScreen extends StatelessWidget {
@@ -95,7 +95,7 @@ class MainScreen extends StatelessWidget {
                     stream: _mediaStateStream,
                     builder: (context, snapshot) {
                       final mediaState = snapshot.data;
-                      return SeekBar(
+                      return SeekBar2(
                         duration:
                             mediaState?.mediaItem?.duration ?? Duration.zero,
                         position: mediaState?.position ?? Duration.zero,
