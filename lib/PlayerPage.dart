@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/component/player/ControlButtons.dart';
@@ -7,6 +10,248 @@ import 'package:flutter_application_1/model/AudioMetadata.dart';
 import 'package:flutter_application_1/model/PositionData.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
+
+MediaControl playControl = MediaControl(
+    androidIcon: 'drawable/play_arrow',
+    label: 'Play',
+    action: MediaAction.play);
+
+MediaControl pauseControl = MediaControl(
+    androidIcon: 'drawable/pause', label: 'Play', action: MediaAction.pause);
+
+MediaControl skipToNextControl = MediaControl(
+    androidIcon: 'drawable/skip_to_next',
+    label: 'Next',
+    action: MediaAction.skipToNext);
+
+MediaControl skipToPrevControl = MediaControl(
+    androidIcon: 'drawable/skip_to_prev',
+    label: 'Previous',
+    action: MediaAction.skipToPrevious);
+
+MediaControl stopControl = MediaControl(
+    androidIcon: 'drawable/stop', label: 'Stop', action: MediaAction.stop);
+
+class AudioPlayerTask extends BackgroundAudioTask {
+  final AudioPlayer audioPlayer;
+  AudioPlayerTask(this.audioPlayer);
+
+  final _queue = <MediaItem>[
+    MediaItem(
+      // This can be any unique id, but we use the audio URL for convenience.
+      id: "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
+      album: "Science Friday",
+      title: "A Salute To Head-Scratching Science",
+      artist: "Science Friday and WNYC Studios",
+      duration: Duration(milliseconds: 5739820),
+      artUri: Uri.parse(
+          "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
+    ),
+    MediaItem(
+      id: "https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3",
+      album: "Science Friday",
+      title: "From Cat Rheology To Operatic Incompetence",
+      artist: "Science Friday and WNYC Studios",
+      duration: Duration(milliseconds: 2856950),
+      artUri: Uri.parse(
+          "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
+    ),
+  ];
+
+  int _queueIndex = -1;
+  AudioProcessingState? _audioProcessingState;
+  bool? _playing;
+
+  bool get hasNext => _queueIndex + 1 < _queue.length;
+  bool get hasPrevious => _queueIndex > 0;
+  MediaItem get mediaItem => _queue[_queueIndex];
+
+  late StreamSubscription<PlayerState> _playerStateSubscription;
+  late StreamSubscription<PlaybackEvent> _eventSubscription;
+
+  @override
+  Future<void> onStart(Map<String, dynamic>? params) {
+    _playerStateSubscription = audioPlayer.playerStateStream.listen((state) {
+      switch (state.processingState) {
+        case ProcessingState.completed:
+          _handlePlaybackComplete();
+          break;
+        default:
+      }
+      if (_audioProcessingState == AudioProcessingState.connecting) {
+        _setState(
+          // connecting
+          processingState:
+              _audioProcessingState ?? AudioProcessingState.connecting,
+          position: audioPlayer.position,
+        );
+      } else if (state.playing) {
+        // playing
+        _setState(
+          processingState: _audioProcessingState ?? AudioProcessingState.ready,
+          position: audioPlayer.position,
+        );
+      } else if (!state.playing) {
+        // paused
+        _setState(
+          processingState: _audioProcessingState ?? AudioProcessingState.ready,
+          position: audioPlayer.position,
+        );
+      }
+    });
+
+    AudioServiceBackground.setQueue(_queue);
+    onSkipToNext();
+
+    return super.onStart(params);
+  }
+
+  _handlePlaybackComplete() {
+    if (hasNext) {
+      onSkipToNext();
+    } else {
+      onStop();
+    }
+  }
+
+  Future<void> _seekRelative(Duration offset) async {
+    var newPosition = audioPlayer.playbackEvent.bufferedPosition + offset;
+    if (newPosition < Duration.zero) {
+      newPosition = Duration.zero;
+    }
+    if (newPosition > mediaItem.duration!) {
+      newPosition = mediaItem.duration!;
+    }
+    await audioPlayer.seek(audioPlayer.playbackEvent.bufferedPosition + offset);
+  }
+
+  @override
+  Future<void> onPause() {
+    _playing = false;
+    audioPlayer.pause();
+    return super.onPause();
+  }
+
+  @override
+  Future<void> onPlay() async {
+    if (null == _audioProcessingState) {
+      _playing = true;
+      audioPlayer.play();
+    }
+  }
+
+  @override
+  Future<void> onSkipToNext() {
+    skip(1);
+    return super.onSkipToNext();
+  }
+
+  void skip(int offset) async {
+    int newPos = _queueIndex + offset;
+    if (!(newPos >= 0 && newPos < _queue.length)) {
+      return;
+    }
+    if (null == _playing) {
+      _playing = true;
+    } else if (_playing!) {
+      await audioPlayer.stop();
+    }
+
+    _queueIndex = newPos;
+    _audioProcessingState = offset > 0
+        ? AudioProcessingState.skippingToNext
+        : AudioProcessingState.skippingToPrevious;
+    AudioServiceBackground.setMediaItem(mediaItem);
+    await audioPlayer.setUrl(mediaItem.id);
+    _audioProcessingState = null;
+    if (_playing!) {
+      onPlay();
+    } else {
+      _setState(processingState: AudioProcessingState.ready);
+    }
+  }
+
+  @override
+  Future<void> onStop() async {
+    _playing = false;
+    await audioPlayer.stop();
+    await audioPlayer.dispose();
+    _playerStateSubscription.cancel();
+    _eventSubscription.cancel();
+    return super.onStop();
+  }
+
+  @override
+  Future<void> onSkipToPrevious() {
+    skip(-1);
+    return super.onSkipToPrevious();
+  }
+
+  @override
+  Future<void> onSeekTo(Duration position) {
+    audioPlayer.seek(position);
+    return super.onSeekTo(position);
+  }
+
+  @override
+  Future<void> onClick(MediaButton button) {
+    _playPause();
+    return super.onClick(button);
+  }
+
+  @override
+  Future<void> onFastForward() async {
+    await _seekRelative(fastForwardInterval);
+  }
+
+  @override
+  Future<void> onRewind() async {
+    await _seekRelative(rewindInterval);
+  }
+
+  _playPause() {
+    if (AudioServiceBackground.state.playing) {
+      onPause();
+    } else {
+      onPlay();
+    }
+  }
+
+  Future<void> _setState(
+      {AudioProcessingState? processingState,
+      Duration? position,
+      Duration? bufferedPosition}) async {
+    if (null == position) {
+      position = audioPlayer.playbackEvent.bufferedPosition;
+    }
+    await AudioServiceBackground.setState(
+        controls: getControls(),
+        systemActions: [MediaAction.seekTo],
+        processingState:
+            processingState ?? AudioServiceBackground.state.processingState,
+        playing: _playing,
+        position: position,
+        speed: audioPlayer.speed);
+  }
+
+  List<MediaControl> getControls() {
+    if (_playing!) {
+      return [
+        skipToPrevControl,
+        pauseControl,
+        stopControl,
+        skipToNextControl,
+      ];
+    } else {
+      return [
+        skipToPrevControl,
+        playControl,
+        stopControl,
+        skipToNextControl,
+      ];
+    }
+  }
+}
 
 class PlayerPage extends StatefulWidget {
   PlayerPage({
@@ -67,6 +312,11 @@ class _PlayerPageState extends State<PlayerPage> {
     await session.configure(AudioSessionConfiguration.speech());
     try {
       await _player.setAudioSource(_playlist);
+      await AudioService.start(
+          backgroundTaskEntrypoint: _audioTaskEntryPoint,
+          androidNotificationChannelName: 'PodQast',
+          androidNotificationColor: 0xFF2222f5,
+          androidNotificationIcon: 'mipmap/ic_launcher');
     } catch (e) {
       // catch load errors: 404, invalid url ...
       print("An error occured $e");
@@ -257,4 +507,8 @@ class _PlayerPageState extends State<PlayerPage> {
       ),
     );
   }
+}
+
+void _audioTaskEntryPoint(AudioPlayer audioPlayer) async {
+  AudioServiceBackground.run(() => AudioPlayerTask(audioPlayer));
 }

@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -30,7 +31,7 @@ class ControlButtons extends StatelessWidget {
           stream: player.sequenceStateStream,
           builder: (context, snapshot) => IconButton(
             icon: Icon(Icons.skip_previous),
-            onPressed: player.hasPrevious ? player.seekToPrevious : null,
+            onPressed: player.hasPrevious ? AudioService.skipToPrevious : null,
           ),
         ),
         StreamBuilder<PlayerState>(
@@ -51,20 +52,19 @@ class ControlButtons extends StatelessWidget {
               return IconButton(
                 icon: Icon(Icons.play_arrow),
                 iconSize: 64.0,
-                onPressed: player.play,
+                onPressed: AudioService.play,
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
                 icon: Icon(Icons.pause),
                 iconSize: 64.0,
-                onPressed: player.pause,
+                onPressed: AudioService.pause,
               );
             } else {
               return IconButton(
                 icon: Icon(Icons.replay),
                 iconSize: 64.0,
-                onPressed: () => player.seek(Duration.zero,
-                    index: player.effectiveIndices!.first),
+                onPressed: () => AudioService.seekTo(Duration.zero),
               );
             }
           },
@@ -73,7 +73,7 @@ class ControlButtons extends StatelessWidget {
           stream: player.sequenceStateStream,
           builder: (context, snapshot) => IconButton(
             icon: Icon(Icons.skip_next),
-            onPressed: player.hasNext ? player.seekToNext : null,
+            onPressed: player.hasNext ? AudioService.skipToNext : null,
           ),
         ),
         StreamBuilder<double>(
@@ -89,7 +89,7 @@ class ControlButtons extends StatelessWidget {
                 min: 0.5,
                 max: 1.5,
                 stream: player.speedStream,
-                onChanged: player.setSpeed,
+                onChanged: AudioService.setSpeed,
               );
             },
           ),
