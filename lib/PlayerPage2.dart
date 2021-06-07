@@ -67,13 +67,16 @@ class PlayerPage2 extends StatelessWidget {
                             SizedBox(
                               height: 20,
                             ),
-                            Text(mediaItem?.album ?? "No album title",
-                                style: Theme.of(context).textTheme.headline5),
+                            Text(
+                              mediaItem?.title ?? "No Title",
+                              style: Theme.of(context).textTheme.headline5,
+                              textAlign: TextAlign.center,
+                            ),
                             SizedBox(
                               height: 10,
                             ),
                             Text(
-                              mediaItem?.title ?? "No Title",
+                              mediaItem?.album ?? "No Album",
                               style: Theme.of(context).textTheme.headline6,
                               textAlign: TextAlign.center,
                             ),
