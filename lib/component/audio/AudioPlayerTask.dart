@@ -35,7 +35,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
       switch (state) {
         case ProcessingState.completed:
           // In this example, the service stops when reaching the end.
-          onStop();
+          onPause();
           break;
         case ProcessingState.ready:
           // If we just came from skipping between tracks, clear the skip
@@ -94,10 +94,10 @@ class AudioPlayerTask extends BackgroundAudioTask {
   Future<void> onSeekTo(Duration position) => _player.seek(position);
 
   @override
-  Future<void> onFastForward() => _seekRelative(fastForwardInterval);
+  Future<void> onFastForward() => _seekRelative(Duration(seconds: 15));
 
   @override
-  Future<void> onRewind() => _seekRelative(-rewindInterval);
+  Future<void> onRewind() => _seekRelative(-Duration(seconds: 15));
 
   @override
   Future<void> onSeekForward(bool begin) async => _seekContinuously(begin, 1);
@@ -193,15 +193,6 @@ class MediaLibrary {
       title: "A Salute To Head-Scratching Science",
       artist: "Science Friday and WNYC Studios",
       duration: Duration(milliseconds: 5739820),
-      artUri: Uri.parse(
-          "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
-    ),
-    MediaItem(
-      id: "https://s3.amazonaws.com/scifri-segments/scifri201711241.mp3",
-      album: "Science Friday",
-      title: "From Cat Rheology To Operatic Incompetence",
-      artist: "Science Friday and WNYC Studios",
-      duration: Duration(milliseconds: 2856950),
       artUri: Uri.parse(
           "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
     ),

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:flutter/widgets.dart';
@@ -48,19 +49,37 @@ class PlayerPage2 extends StatelessWidget {
                         Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
+                            Container(
+                              width: 300,
+                              height: 300,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: FittedBox(
                                   child: artwork == null
                                       ? Image.asset('assets/image/PodQast.png')
                                       : Image.network(
                                           artwork,
-                                          width: 350,
-                                        )),
+                                        ),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
                             ),
                             Text(mediaItem?.album ?? "No album title",
-                                style: Theme.of(context).textTheme.headline6),
-                            Text(mediaItem?.title ?? "No Title"),
+                                style: Theme.of(context).textTheme.headline5),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mediaItem?.title ?? "No Title",
+                              style: Theme.of(context).textTheme.headline6,
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
                           ],
                         ),
                         Column(
@@ -70,39 +89,42 @@ class PlayerPage2 extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  IconButton(
-                                    icon: Icon(Icons.skip_previous),
-                                    iconSize: 64.0,
-                                    onPressed: mediaItem == queue.first
-                                        ? null
-                                        : AudioService.skipToPrevious,
-                                  ),
-                                  StreamBuilder<bool>(
-                                    stream: AudioService.playbackStateStream
-                                        .map((state) => state.playing)
-                                        .distinct(),
+                                  rewindButton(),
+                                  StreamBuilder<PlaybackState>(
+                                    stream: AudioService.playbackStateStream,
                                     builder: (context, snapshot) {
-                                      final playing = snapshot.data ?? false;
+                                      final state = snapshot.data;
+                                      final playing = state?.playing ?? false;
+                                      final completed =
+                                          state?.processingState ==
+                                              AudioProcessingState.completed;
+                                      final buffering =
+                                          state?.processingState ==
+                                              AudioProcessingState.buffering;
                                       return Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          if (playing)
+                                          if (buffering)
+                                            SizedBox(
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                              height: 64.0,
+                                              width: 64.0,
+                                            )
+                                          else if (playing)
                                             pauseButton()
+                                          else if (completed)
+                                            replayButton()
                                           else
                                             playButton(),
-                                          // stopButton(),
                                         ],
                                       );
                                     },
                                   ),
-                                  IconButton(
-                                    icon: Icon(Icons.skip_next),
-                                    iconSize: 64.0,
-                                    onPressed: mediaItem == queue.last
-                                        ? null
-                                        : AudioService.skipToNext,
-                                  ),
+                                  fastForwardButton(),
+                                  // replayButton(),
                                 ],
                               ),
                           ],
@@ -182,21 +204,42 @@ class PlayerPage2 extends StatelessWidget {
           (queue, mediaItem) => QueueState(queue, mediaItem));
 
   IconButton playButton() => IconButton(
-        icon: Icon(Icons.play_arrow),
-        iconSize: 64.0,
+        icon: Icon(Icons.play_arrow_rounded),
+        iconSize: 48.0,
         onPressed: AudioService.play,
       );
 
   IconButton pauseButton() => IconButton(
-        icon: Icon(Icons.pause),
-        iconSize: 64.0,
+        icon: Icon(Icons.pause_circle_filled_rounded),
+        iconSize: 48.0,
         onPressed: AudioService.pause,
       );
 
   IconButton stopButton() => IconButton(
         icon: Icon(Icons.stop),
-        iconSize: 64.0,
+        iconSize: 48.0,
         onPressed: AudioService.stop,
+      );
+
+  IconButton replayButton() => IconButton(
+        icon: Icon(Icons.replay),
+        iconSize: 42.0,
+        onPressed: () async {
+          await AudioService.seekTo(Duration.zero);
+          AudioService.play();
+        },
+      );
+
+  IconButton rewindButton() => IconButton(
+        icon: Icon(Icons.fast_rewind_rounded),
+        iconSize: 42.0,
+        onPressed: () => AudioService.rewind(),
+      );
+
+  IconButton fastForwardButton() => IconButton(
+        icon: Icon(Icons.fast_forward_rounded),
+        iconSize: 42.0,
+        onPressed: () => AudioService.fastForward(),
       );
 }
 
