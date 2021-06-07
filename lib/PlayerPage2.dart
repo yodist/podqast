@@ -108,20 +108,19 @@ class PlayerPage2 extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          if (buffering)
-                                            SizedBox(
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                              height: 64.0,
-                                              width: 64.0,
-                                            )
-                                          else if (playing)
-                                            pauseButton()
-                                          else if (completed)
-                                            replayButton()
-                                          else
-                                            playButton(),
+                                          SizedBox(
+                                            width: 64.0,
+                                            height: 64.0,
+                                            child: Center(
+                                              child: buffering
+                                                  ? CircularProgressIndicator()
+                                                  : playing
+                                                      ? pauseButton()
+                                                      : completed
+                                                          ? replayButton()
+                                                          : playButton(),
+                                            ),
+                                          ),
                                         ],
                                       );
                                     },
