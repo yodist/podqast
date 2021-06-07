@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/PlayerPage.dart';
+import 'package:flutter_application_1/PlayerPage2.dart';
 import 'package:flutter_application_1/PodcastDetailPage.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -103,12 +104,13 @@ class EpisodeCard extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PlayerPage(
-                                audioUri: this.audioUri,
-                                album: this.publisher,
-                                artwork: this.imageUrl,
-                                title: this.title,
-                              )),
+                          // builder: (context) => PlayerPage(
+                          //       audioUri: this.audioUri,
+                          //       album: this.publisher,
+                          //       artwork: this.imageUrl,
+                          //       title: this.title,
+                          //     )),
+                          builder: (context) => PlayerPage2()),
                     );
                   },
                 ),

@@ -1,5 +1,6 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/LoginPage.dart';
+import 'package:flutter_application_1/HomePage.dart';
 
 void main() async {
   // to ensure everything is initialized before runApp, for this case, is
@@ -17,7 +18,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LoginPage(),
+      home: AudioServiceWidget(
+          child: HomePage(
+        title: "PodQast",
+      )),
     );
   }
 }

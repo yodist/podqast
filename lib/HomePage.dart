@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/widget/PodcastSearch.dart';
 import 'package:flutter_application_1/widget/podcastHome.dart';
+import 'package:audio_service/audio_service.dart';
+
+import 'component/audio/AudioPlayerTask.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
@@ -31,6 +34,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    AudioService.start(
+      backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
+      androidNotificationChannelName: 'PodQast',
+      // Enable this if you want the Android service to exit the foreground state on pause.
+      //androidStopForegroundOnPause: true,
+      androidNotificationColor: 0xFF2196f3,
+      androidNotificationIcon: 'mipmap/ic_launcher',
+      androidEnableQueue: true,
+    );
 
     _pageController = PageController();
     futureBestPod = podcastService.fetchBestPodcasts();
@@ -87,4 +100,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+// NOTE: Your entrypoint MUST be a top-level function.
+void _audioPlayerTaskEntrypoint() async {
+  AudioServiceBackground.run(() => AudioPlayerTask());
 }
