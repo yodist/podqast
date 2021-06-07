@@ -55,7 +55,8 @@ class AudioPlayerTask extends BackgroundAudioTask {
             queue.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),
       ));
       // In this example, we automatically start playing on start.
-      // onPlay();
+
+      onPrepare();
     } catch (e) {
       print("Error: $e");
       onStop();

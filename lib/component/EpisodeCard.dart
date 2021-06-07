@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/PlayerPage.dart';
 import 'package:flutter_application_1/PlayerPage2.dart';
 import 'package:flutter_application_1/PodcastDetailPage.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';

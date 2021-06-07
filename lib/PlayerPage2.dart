@@ -42,50 +42,77 @@ class PlayerPage2 extends StatelessWidget {
                     final queueState = snapshot.data;
                     final queue = queueState?.queue ?? [];
                     final mediaItem = queueState?.mediaItem;
+                    final artwork = mediaItem?.artUri.toString();
                     return Column(
-                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (queue.isNotEmpty)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.skip_previous),
-                                iconSize: 64.0,
-                                onPressed: mediaItem == queue.first
-                                    ? null
-                                    : AudioService.skipToPrevious,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                  child: artwork == null
+                                      ? Image.asset('assets/image/PodQast.png')
+                                      : Image.network(
+                                          artwork,
+                                          width: 350,
+                                        )),
+                            ),
+                            Text(mediaItem?.album ?? "No album title",
+                                style: Theme.of(context).textTheme.headline6),
+                            Text(mediaItem?.title ?? "No Title"),
+                          ],
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (queue.isNotEmpty)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.skip_previous),
+                                    iconSize: 64.0,
+                                    onPressed: mediaItem == queue.first
+                                        ? null
+                                        : AudioService.skipToPrevious,
+                                  ),
+                                  StreamBuilder<bool>(
+                                    stream: AudioService.playbackStateStream
+                                        .map((state) => state.playing)
+                                        .distinct(),
+                                    builder: (context, snapshot) {
+                                      final playing = snapshot.data ?? false;
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          if (playing)
+                                            pauseButton()
+                                          else
+                                            playButton(),
+                                          // stopButton(),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.skip_next),
+                                    iconSize: 64.0,
+                                    onPressed: mediaItem == queue.last
+                                        ? null
+                                        : AudioService.skipToNext,
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                icon: Icon(Icons.skip_next),
-                                iconSize: 64.0,
-                                onPressed: mediaItem == queue.last
-                                    ? null
-                                    : AudioService.skipToNext,
-                              ),
-                            ],
-                          ),
-                        if (mediaItem?.title != null) Text(mediaItem!.title),
+                          ],
+                        )
                       ],
                     );
                   },
                 ),
                 // Play/pause/stop buttons.
-                StreamBuilder<bool>(
-                  stream: AudioService.playbackStateStream
-                      .map((state) => state.playing)
-                      .distinct(),
-                  builder: (context, snapshot) {
-                    final playing = snapshot.data ?? false;
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (playing) pauseButton() else playButton(),
-                        stopButton(),
-                      ],
-                    );
-                  },
-                ),
+
                 // A seek bar.
                 StreamBuilder<MediaState>(
                   stream: _mediaStateStream,
