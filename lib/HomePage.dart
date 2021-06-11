@@ -3,6 +3,7 @@ import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/widget/PodcastSearch.dart';
 import 'package:flutter_application_1/widget/podcastHome.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import 'component/audio/AudioPlayerTask.dart';
 
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PodcastService podcastService = PodcastService();
 
   late PageController _pageController;
@@ -29,6 +31,10 @@ class _HomePageState extends State<HomePage> {
       _pageController.animateToPage(index,
           duration: Duration(milliseconds: 250), curve: Curves.ease);
     });
+    // showSimpleNotification(Text("Hello"),
+    //     position: NotificationPosition.bottom,
+    //     slideDismissDirection: DismissDirection.down,
+    //     autoDismiss: false);
   }
 
   @override
@@ -63,6 +69,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60.0),
         child: AppBar(
