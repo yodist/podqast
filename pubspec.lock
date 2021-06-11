@@ -105,7 +105,14 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
+  cupertino_list_tile:
+    dependency: "direct main"
+    description:
+      name: cupertino_list_tile
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   fake_async:
     dependency: transitive
     description:

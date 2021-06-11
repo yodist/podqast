@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:flutter/widgets.dart';
@@ -12,16 +12,15 @@ import 'package:flutter/widgets.dart';
 class PlayerPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50.0),
-        child: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Colors.white,
-          elevation: 0,
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Image(
+          image: AssetImage('assets/image/PodQast.png'),
+          height: 35,
         ),
+        backgroundColor: Colors.white,
       ),
-      body: Center(
+      child: Center(
         child: StreamBuilder<bool>(
           stream: AudioService.runningStream,
           builder: (context, snapshot) {
@@ -69,7 +68,7 @@ class PlayerPage2 extends StatelessWidget {
                             ),
                             Text(
                               mediaItem?.title ?? "No Title",
-                              style: Theme.of(context).textTheme.headline5,
+                              style: TextStyle(fontSize: 24),
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(
@@ -77,7 +76,7 @@ class PlayerPage2 extends StatelessWidget {
                             ),
                             Text(
                               mediaItem?.album ?? "No Album",
-                              style: Theme.of(context).textTheme.headline6,
+                              style: TextStyle(fontSize: 18),
                               textAlign: TextAlign.center,
                             ),
                             SizedBox(
@@ -113,7 +112,7 @@ class PlayerPage2 extends StatelessWidget {
                                             height: 64.0,
                                             child: Center(
                                               child: buffering
-                                                  ? CircularProgressIndicator()
+                                                  ? CupertinoActivityIndicator()
                                                   : playing
                                                       ? pauseButton()
                                                       : completed
@@ -205,42 +204,90 @@ class PlayerPage2 extends StatelessWidget {
           AudioService.currentMediaItemStream,
           (queue, mediaItem) => QueueState(queue, mediaItem));
 
-  IconButton playButton() => IconButton(
-        icon: Icon(Icons.play_arrow_rounded),
-        iconSize: 48.0,
+  // IconButton playButton() => IconButton(
+  //       icon: Icon(Icons.play_arrow_rounded),
+  //       iconSize: 48.0,
+  //       onPressed: AudioService.play,
+  //     );
+
+  // IconButton pauseButton() => IconButton(
+  //       icon: Icon(Icons.pause_circle_filled_rounded),
+  //       iconSize: 48.0,
+  //       onPressed: AudioService.pause,
+  //     );
+
+  // IconButton stopButton() => IconButton(
+  //       icon: Icon(Icons.stop),
+  //       iconSize: 48.0,
+  //       onPressed: AudioService.stop,
+  //     );
+
+  // IconButton replayButton() => IconButton(
+  //       icon: Icon(Icons.replay),
+  //       iconSize: 42.0,
+  //       onPressed: () async {
+  //         await AudioService.seekTo(Duration.zero);
+  //         AudioService.play();
+  //       },
+  //     );
+
+  // IconButton rewindButton() => IconButton(
+  //       icon: Icon(Icons.fast_rewind_rounded),
+  //       iconSize: 42.0,
+  //       onPressed: () => AudioService.rewind(),
+  //     );
+
+  // IconButton fastForwardButton() => IconButton(
+  //       icon: Icon(Icons.fast_forward_rounded),
+  //       iconSize: 42.0,
+  //       onPressed: () => AudioService.fastForward(),
+  //     );
+
+  CupertinoButton playButton() => CupertinoButton(
+        child: Icon(
+          Icons.play_arrow_rounded,
+          size: 48.0,
+        ),
         onPressed: AudioService.play,
       );
 
-  IconButton pauseButton() => IconButton(
-        icon: Icon(Icons.pause_circle_filled_rounded),
-        iconSize: 48.0,
+  CupertinoButton pauseButton() => CupertinoButton(
+        child: Icon(
+          Icons.pause_circle_filled_rounded,
+          size: 48,
+        ),
         onPressed: AudioService.pause,
       );
 
-  IconButton stopButton() => IconButton(
-        icon: Icon(Icons.stop),
-        iconSize: 48.0,
+  CupertinoButton stopButton() => CupertinoButton(
+        child: Icon(Icons.stop, size: 48),
         onPressed: AudioService.stop,
       );
 
-  IconButton replayButton() => IconButton(
-        icon: Icon(Icons.replay),
-        iconSize: 42.0,
+  CupertinoButton replayButton() => CupertinoButton(
+        child: Icon(
+          Icons.replay,
+          size: 42,
+        ),
         onPressed: () async {
           await AudioService.seekTo(Duration.zero);
           AudioService.play();
         },
       );
 
-  IconButton rewindButton() => IconButton(
-        icon: Icon(Icons.fast_rewind_rounded),
-        iconSize: 42.0,
+  CupertinoButton rewindButton() => CupertinoButton(
+        child: Icon(
+          Icons.fast_rewind_rounded,
+          size: 42,
+        ),
         onPressed: () => AudioService.rewind(),
       );
 
-  IconButton fastForwardButton() => IconButton(
-        icon: Icon(Icons.fast_forward_rounded),
-        iconSize: 42.0,
+  CupertinoButton fastForwardButton() => CupertinoButton(
+        child: Icon(
+          Icons.fast_forward_rounded,
+          size: 42,
+        ),
         onPressed: () => AudioService.fastForward(),
       );
 }
@@ -289,28 +336,33 @@ class _SeekBarState extends State<SeekBar> {
     }
     return Stack(
       children: [
-        Slider(
-          min: 0.0,
-          max: widget.duration.inMilliseconds.toDouble(),
-          value: value,
-          onChanged: (value) {
-            if (!_dragging) {
-              _dragging = true;
-            }
-            setState(() {
-              _dragValue = value;
-            });
-            if (widget.onChanged != null) {
-              widget.onChanged!(Duration(milliseconds: value.round()));
-            }
-          },
-          onChangeEnd: (value) {
-            if (widget.onChangeEnd != null) {
-              widget.onChangeEnd!(Duration(milliseconds: value.round()));
-            }
-            _dragging = false;
-          },
-        ),
+        SizedBox(
+            width: 350,
+            height: 40,
+            child: CupertinoSlider(
+              min: 0.0,
+              max: widget.duration.inMilliseconds.toDouble() == 0
+                  ? 1.0
+                  : widget.duration.inMilliseconds.toDouble(),
+              value: value,
+              onChanged: (value) {
+                if (!_dragging) {
+                  _dragging = true;
+                }
+                setState(() {
+                  _dragValue = value;
+                });
+                if (widget.onChanged != null) {
+                  widget.onChanged!(Duration(milliseconds: value.round()));
+                }
+              },
+              onChangeEnd: (value) {
+                if (widget.onChangeEnd != null) {
+                  widget.onChangeEnd!(Duration(milliseconds: value.round()));
+                }
+                _dragging = false;
+              },
+            )),
         Positioned(
           right: 16.0,
           bottom: 0.0,
@@ -319,7 +371,7 @@ class _SeekBarState extends State<SeekBar> {
                       .firstMatch("$_remaining")
                       ?.group(1) ??
                   '$_remaining',
-              style: Theme.of(context).textTheme.caption),
+              style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle),
         ),
       ],
     );

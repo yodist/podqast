@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/component/EpisodeCard.dart';
 import 'package:flutter_application_1/service/PodcastService.dart';
@@ -51,18 +52,18 @@ class _PodcastListPageState extends State<PodcastListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CupertinoPageScaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: AppBar(
-            iconTheme: IconThemeData(color: Colors.black),
-            backgroundColor: Colors.white,
-            elevation: 0,
+        navigationBar: CupertinoNavigationBar(
+          middle: Image(
+            image: AssetImage('assets/image/PodQast.png'),
+            height: 35,
           ),
+          backgroundColor: Colors.white,
+          transitionBetweenRoutes: false,
         ),
-        body: SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               FutureBuilder(
@@ -73,9 +74,10 @@ class _PodcastListPageState extends State<PodcastListPage> {
                       return Row(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10.0),
+                            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             width: 150.0,
                             child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
                               child: Image(
                                 image: NetworkImage(snapshotData['image']),
                               ),
@@ -89,7 +91,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                 child: Text(
                                   StringUtil.parseHtmlString(
                                       snapshotData['title']),
-                                  style: GoogleFonts.openSans(
+                                  style: TextStyle(
                                       fontSize: 24,
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),
@@ -103,7 +105,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                 child: Text(
                                   // StringUtil.parseHtmlString(description),
                                   snapshotData['publisher'],
-                                  style: GoogleFonts.openSans(
+                                  style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,

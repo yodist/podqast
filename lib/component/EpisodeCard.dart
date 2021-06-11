@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/PlayerPage2.dart';
 import 'package:flutter_application_1/PodcastDetailPage.dart';
+import 'package:flutter_application_1/component/OverlayPlayer.dart';
+import 'package:flutter_application_1/util/ConfigUtil.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class EpisodeCard extends StatelessWidget {
   EpisodeCard(this.episodeId,
@@ -77,16 +80,15 @@ class EpisodeCard extends StatelessWidget {
                 ),
                 Text(
                   this.releaseDate,
-                  style: GoogleFonts.robotoCondensed(
-                      fontSize: 16, color: Colors.black),
+                  style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 SizedBox(
                   width: 20,
                 ),
                 Text(
                   this.duration,
-                  style: GoogleFonts.robotoCondensed(
-                      fontSize: 16,
+                  style: TextStyle(
+                      fontSize: 14,
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
@@ -100,6 +102,9 @@ class EpisodeCard extends StatelessWidget {
                     size: 30,
                   ),
                   onPressed: () {
+                    // if (ConfigUtil.currentOverlay != null) {
+                    //   ConfigUtil.currentOverlay!.dismiss();
+                    // }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -111,6 +116,21 @@ class EpisodeCard extends StatelessWidget {
                           //     )),
                           builder: (context) => PlayerPage2()),
                     );
+                    // .then((context) {
+                    //   ConfigUtil.currentOverlay = showOverlayNotification(
+                    //       (context) {
+                    //     return OverlayPlayer(
+                    //       key: ValueKey('AudioPlayer'),
+                    //       message: 'x',
+                    //       onReply: () {
+                    //         OverlaySupportEntry.of(context)!.dismiss();
+                    //         toast('you checked this message');
+                    //       },
+                    //     );
+                    //   },
+                    //       position: NotificationPosition.bottom,
+                    //       duration: Duration.zero);
+                    // });
                   },
                 ),
                 SizedBox(

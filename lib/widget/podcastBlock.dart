@@ -6,11 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 Widget podcastBlock(
     BuildContext context, String id, String imageUrl, String title,
     {List? genreIds, String publisher = "", String description = ""}) {
-  return InkWell(
+  return Material(
+      child: InkWell(
     splashColor: Colors.blue.withAlpha(30),
     onTap: () {
-      Navigator.push(
-        context,
+      Navigator.of(context, rootNavigator: true).push(
         MaterialPageRoute(
             builder: (context) => PodcastListPage(
                   id,
@@ -39,8 +39,7 @@ Widget podcastBlock(
           width: 150.0,
           child: Text(
             title,
-            style: GoogleFonts.robotoCondensed(
-                fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18.0),
             maxLines: 1,
             overflow: TextOverflow.fade,
             softWrap: false,
@@ -51,10 +50,7 @@ Widget podcastBlock(
           width: 150.0,
           child: Text(
             publisher,
-            style: GoogleFonts.robotoCondensed(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[600]),
+            style: TextStyle(fontSize: 15.0),
             maxLines: 1,
             overflow: TextOverflow.fade,
             softWrap: false,
@@ -62,5 +58,5 @@ Widget podcastBlock(
         ),
       ],
     ),
-  );
+  ));
 }

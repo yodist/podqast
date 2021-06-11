@@ -11,8 +11,7 @@ Widget podcastHome(Future<Map<String, dynamic>> data) {
         margin: EdgeInsets.fromLTRB(15, 10, 0, 10),
         child: Text(
           "Top Podcasts",
-          style: GoogleFonts.robotoCondensed(
-              fontSize: 28, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 28),
         ),
         alignment: Alignment.centerLeft,
       ),

@@ -4,7 +4,8 @@ import 'package:flutter_application_1/PodcastListPage.dart';
 import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter_typeahead/cupertino_flutter_typeahead.dart';
+import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
 class PodcastSearch extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class PodcastSearch extends StatefulWidget {
 
 class _PodcastSearchState extends State<PodcastSearch> {
   PodcastService podcastService = PodcastService();
+  final TextEditingController _typeAheadController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +22,20 @@ class _PodcastSearchState extends State<PodcastSearch> {
         margin: const EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            TypeAheadField(
-              textFieldConfiguration: TextFieldConfiguration(
+            CupertinoTypeAheadFormField(
+              textFieldConfiguration: CupertinoTextFieldConfiguration(
                   autofocus: true,
                   style: DefaultTextStyle.of(context)
                       .style
                       .copyWith(fontStyle: FontStyle.italic, fontSize: 18),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Search podcast title or publisher name",
-                  )),
+                  controller: _typeAheadController,
+                  placeholder: 'Search podcast title or publisher name'),
               suggestionsCallback: (pattern) async {
                 return await podcastService.getSuggestions(pattern);
               },
               itemBuilder: (context, Map<String, dynamic> suggestion) {
-                return ListTile(
+                return Material(
+                    child: ListTile(
                   leading: Image.network(suggestion['thumbnail']),
                   title: Html(data: suggestion['title_highlighted'], style: {
                     "*": Style(fontSize: FontSize.large),
@@ -42,7 +43,7 @@ class _PodcastSearchState extends State<PodcastSearch> {
                         Style(backgroundColor: Colors.amber),
                   }),
                   subtitle: Text(suggestion['publisher_original']),
-                );
+                ));
               },
               onSuggestionSelected: (suggestion) {
                 Map<String, dynamic> sugg =
