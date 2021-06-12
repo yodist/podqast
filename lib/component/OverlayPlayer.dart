@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OverlayPlayer extends StatelessWidget {
@@ -13,21 +14,18 @@ class OverlayPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.blue,
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 70),
-      child: SafeArea(
-        child: ListTile(
-          leading: SizedBox.fromSize(size: const Size(20, 20)),
-          title: Text('Boyan'),
-          subtitle: Text(message),
-          trailing: IconButton(
-              icon: Icon(Icons.reply),
-              onPressed: () {
-                onReply();
-              }),
-        ),
+    return SafeArea(
+      child: ListTile(
+        leading: SizedBox.fromSize(size: const Size(20, 20)),
+        title: Text('Boyan'),
+        subtitle: Text(message),
+        trailing: IconButton(
+            icon: Icon(CupertinoIcons.play),
+            onPressed: () {
+              onReply();
+            }),
       ),
+      // ),
     );
   }
 }

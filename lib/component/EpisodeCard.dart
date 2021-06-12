@@ -1,13 +1,11 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/MainProvider.dart';
 import 'package:flutter_application_1/PlayerPage2.dart';
 import 'package:flutter_application_1/PodcastDetailPage.dart';
-import 'package:flutter_application_1/component/OverlayPlayer.dart';
-import 'package:flutter_application_1/util/ConfigUtil.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:overlay_support/overlay_support.dart';
+import 'package:provider/provider.dart';
 
 class EpisodeCard extends StatelessWidget {
   EpisodeCard(this.episodeId,
@@ -106,6 +104,7 @@ class EpisodeCard extends StatelessWidget {
                     size: 30,
                   ),
                   onPressed: () async {
+                    context.read<MainProvider>().showPlayer();
                     List<MediaItem> playlist = <MediaItem>[
                       MediaItem(
                         // This can be any unique id, but we use the audio URL for convenience.

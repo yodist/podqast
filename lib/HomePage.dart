@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/MainProvider.dart';
+import 'package:flutter_application_1/component/OverlayPlayer.dart';
 import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/widget/PodcastSearch.dart';
-import 'package:flutter_application_1/widget/podcastHome.dart';
+import 'package:flutter_application_1/widget/PodcastHomeTab.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:provider/provider.dart';
 
 import 'component/audio/AudioPlayerTask.dart';
 
@@ -17,10 +20,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PodcastService podcastService = PodcastService();
 
+  late PageController _pageController;
+  int _selectedIndex = 0;
   late List<Widget> _widgetOptions;
   late Future<Map<String, dynamic>> futureBestPod;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 250), curve: Curves.ease);
+    });
+    // showSimpleNotification(Text("Hello"),
+    //     position: NotificationPosition.bottom,
+    //     slideDismissDirection: DismissDirection.down,
+    //     autoDismiss: false);
+  }
 
   @override
   void initState() {
@@ -36,6 +54,7 @@ class _HomePageState extends State<HomePage> {
       androidEnableQueue: true,
     );
 
+    _pageController = PageController();
     futureBestPod = podcastService.fetchBestPodcasts();
 
     _widgetOptions = <Widget>[
@@ -46,29 +65,56 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
+    _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      // navigationBar: CupertinoNavigationBar(
-      //   middle: Image(
-      //     image: AssetImage('assets/image/PodQast.png'),
-      //     height: 35,
+    return Scaffold(
+      key: _scaffoldKey,
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(60.0),
+      //   child: AppBar(
+      //     title: Image(
+      //       image: AssetImage('assets/image/PodQast.png'),
+      //       height: 35,
+      //     ),
+      //     backgroundColor: Colors.white,
       //   ),
-      //   backgroundColor: Colors.white,
       // ),
-      child: CupertinoTabScaffold(
-        tabBar: CupertinoTabBar(items: [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.house)),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.search),
-          ),
-        ]),
-        tabBuilder: (BuildContext context, index) {
-          return _widgetOptions[index];
+      body: SizedBox.expand(
+          child: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
         },
+        children: _widgetOptions,
+      )),
+      persistentFooterButtons: <Widget>[
+        Visibility(
+            visible: context.watch<MainProvider>().showMiniPlayer,
+            child: Container(
+                height: 60,
+                width: 400,
+                child: OverlayPlayer(onReply: () {}, message: "Test"))),
+      ],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.purple,
+        onTap: _onItemTapped,
       ),
     );
   }

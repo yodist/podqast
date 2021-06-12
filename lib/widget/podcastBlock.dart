@@ -12,7 +12,7 @@ Widget podcastBlock(
     onTap: () {
       Navigator.push(
         context,
-        CupertinoPageRoute(
+        MaterialPageRoute(
             builder: (context) => PodcastListPage(
                   id,
                   title: title,
