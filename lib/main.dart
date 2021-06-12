@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/HomePage.dart';
 import 'package:overlay_support/overlay_support.dart';
 
+final GlobalKey<NavigatorState> firstTabNavKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> secondTabNavKey = GlobalKey<NavigatorState>();
 void main() async {
   // to ensure everything is initialized before runApp, for this case, is
   // global config load from app_config
@@ -35,6 +37,10 @@ class MyApp extends StatelessWidget {
           title: "PodQast",
         ),
       ),
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        DefaultMaterialLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+      ],
     ));
   }
 }

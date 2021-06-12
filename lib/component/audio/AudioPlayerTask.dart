@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
@@ -61,6 +62,16 @@ class AudioPlayerTask extends BackgroundAudioTask {
       print("Error: $e");
       onStop();
     }
+  }
+
+  Future<void> onUpdateQueue(List<MediaItem> q) async {
+    AudioServiceBackground.setQueue(_mediaLibrary.items = q);
+    _player.currentIndexStream.listen((index) {
+      if (index != null) AudioServiceBackground.setMediaItem(queue[index]);
+    });
+    await _player.setAudioSource(ConcatenatingAudioSource(
+      children: q.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),
+    ));
   }
 
   @override
@@ -185,7 +196,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
 /// Provides access to a library of media items. In your app, this could come
 /// from a database or web service.
 class MediaLibrary {
-  final _items = <MediaItem>[
+  var items = <MediaItem>[
     MediaItem(
       // This can be any unique id, but we use the audio URL for convenience.
       id: "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
@@ -197,8 +208,6 @@ class MediaLibrary {
           "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg"),
     ),
   ];
-
-  List<MediaItem> get items => _items;
 }
 
 /// An object that performs interruptable sleep.

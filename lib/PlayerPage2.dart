@@ -90,8 +90,12 @@ class PlayerPage2 extends StatelessWidget {
                             if (queue.isNotEmpty)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  rewindButton(),
+                                  SizedBox(
+                                      width: 64.0,
+                                      height: 48.0,
+                                      child: Center(child: rewindButton())),
                                   StreamBuilder<PlaybackState>(
                                     stream: AudioService.playbackStateStream,
                                     builder: (context, snapshot) {
@@ -124,7 +128,11 @@ class PlayerPage2 extends StatelessWidget {
                                       );
                                     },
                                   ),
-                                  fastForwardButton(),
+                                  SizedBox(
+                                      width: 64.0,
+                                      height: 48.0,
+                                      child:
+                                          Center(child: fastForwardButton())),
                                   // replayButton(),
                                 ],
                               ),
@@ -245,7 +253,7 @@ class PlayerPage2 extends StatelessWidget {
 
   CupertinoButton playButton() => CupertinoButton(
         child: Icon(
-          Icons.play_arrow_rounded,
+          CupertinoIcons.play_circle,
           size: 48.0,
         ),
         onPressed: AudioService.play,
@@ -253,14 +261,14 @@ class PlayerPage2 extends StatelessWidget {
 
   CupertinoButton pauseButton() => CupertinoButton(
         child: Icon(
-          Icons.pause_circle_filled_rounded,
+          CupertinoIcons.pause_circle_fill,
           size: 48,
         ),
         onPressed: AudioService.pause,
       );
 
   CupertinoButton stopButton() => CupertinoButton(
-        child: Icon(Icons.stop, size: 48),
+        child: Icon(Icons.stop, size: 48.0),
         onPressed: AudioService.stop,
       );
 
@@ -277,16 +285,16 @@ class PlayerPage2 extends StatelessWidget {
 
   CupertinoButton rewindButton() => CupertinoButton(
         child: Icon(
-          Icons.fast_rewind_rounded,
-          size: 42,
+          CupertinoIcons.backward_fill,
+          size: 36.0,
         ),
         onPressed: () => AudioService.rewind(),
       );
 
   CupertinoButton fastForwardButton() => CupertinoButton(
         child: Icon(
-          Icons.fast_forward_rounded,
-          size: 42,
+          CupertinoIcons.forward_fill,
+          size: 36.0,
         ),
         onPressed: () => AudioService.fastForward(),
       );

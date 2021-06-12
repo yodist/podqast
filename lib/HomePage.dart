@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
     futureBestPod = podcastService.fetchBestPodcasts();
 
     _widgetOptions = <Widget>[
-      podcastHome(futureBestPod),
+      PodcastHomeTab(data: futureBestPod),
       PodcastSearch(),
     ];
   }
@@ -52,13 +52,13 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Image(
-          image: AssetImage('assets/image/PodQast.png'),
-          height: 35,
-        ),
-        backgroundColor: Colors.white,
-      ),
+      // navigationBar: CupertinoNavigationBar(
+      //   middle: Image(
+      //     image: AssetImage('assets/image/PodQast.png'),
+      //     height: 35,
+      //   ),
+      //   backgroundColor: Colors.white,
+      // ),
       child: CupertinoTabScaffold(
         tabBar: CupertinoTabBar(items: [
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.house)),

@@ -56,6 +56,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         navigationBar: CupertinoNavigationBar(
+          heroTag: 'tab1-1',
           middle: Image(
             image: AssetImage('assets/image/PodQast.png'),
             height: 35,
@@ -184,6 +185,8 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                       item['pub_date_ms']));
                               var duration = StringUtil.formatDurationHHmm(
                                   item['audio_length_sec']);
+                              var durationDur =
+                                  Duration(seconds: item['audio_length_sec']);
 
                               return EpisodeCard(
                                 item['id'],
@@ -194,6 +197,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                 subtitle: item['description'],
                                 releaseDate: releaseDate,
                                 duration: duration,
+                                durationDur: durationDur,
                                 fileSize: fileSize,
                                 audioUri: audioUrl,
                               );

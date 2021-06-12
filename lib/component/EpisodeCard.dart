@@ -1,3 +1,5 @@
+import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/PlayerPage2.dart';
 import 'package:flutter_application_1/PodcastDetailPage.dart';
@@ -16,6 +18,7 @@ class EpisodeCard extends StatelessWidget {
       this.subtitle = "",
       required this.imageUrl,
       required this.duration,
+      required this.durationDur,
       required this.releaseDate,
       this.publisher = "",
       this.fileSize = "0 MB",
@@ -30,6 +33,7 @@ class EpisodeCard extends StatelessWidget {
   final String subtitle;
   final String releaseDate;
   final String duration;
+  final Duration durationDur;
   final String publisher;
   final String fileSize;
   final String audioUri;
@@ -42,7 +46,7 @@ class EpisodeCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) => PodcastDetailPage(
                       this.episodeId,
                       title: this.title,
@@ -101,7 +105,20 @@ class EpisodeCard extends StatelessWidget {
                     Icons.play_circle_outline,
                     size: 30,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    List<MediaItem> playlist = <MediaItem>[
+                      MediaItem(
+                        // This can be any unique id, but we use the audio URL for convenience.
+                        id: this.audioUri,
+                        album: this.title,
+                        title: this.podcastTitle,
+                        artist: this.publisher,
+                        duration: durationDur,
+                        artUri: Uri.parse(this.imageUrl),
+                      ),
+                    ];
+                    await AudioService.updateQueue(playlist);
+                    await AudioService.skipToQueueItem(playlist[0].id);
                     // if (ConfigUtil.currentOverlay != null) {
                     //   ConfigUtil.currentOverlay!.dismiss();
                     // }

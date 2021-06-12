@@ -10,8 +10,9 @@ Widget podcastBlock(
       child: InkWell(
     splashColor: Colors.blue.withAlpha(30),
     onTap: () {
-      Navigator.of(context, rootNavigator: true).push(
-        MaterialPageRoute(
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
             builder: (context) => PodcastListPage(
                   id,
                   title: title,
