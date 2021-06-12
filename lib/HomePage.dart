@@ -96,10 +96,7 @@ class _HomePageState extends State<HomePage> {
       persistentFooterButtons: <Widget>[
         Visibility(
             visible: context.watch<MainProvider>().showMiniPlayer,
-            child: Container(
-                height: 60,
-                width: 400,
-                child: OverlayPlayer(onReply: () {}, message: "Test"))),
+            child: Container(height: 120, width: 400, child: OverlayPlayer())),
       ],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

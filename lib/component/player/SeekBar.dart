@@ -1,21 +1,17 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
 import 'dart:math';
 
-import 'package:flutter_application_1/component/player/HiddenThumbComponentShape.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class SeekBar extends StatefulWidget {
   final Duration duration;
   final Duration position;
-  final Duration bufferedPosition;
   final ValueChanged<Duration>? onChanged;
   final ValueChanged<Duration>? onChangeEnd;
 
   SeekBar({
     required this.duration,
     required this.position,
-    required this.bufferedPosition,
     this.onChanged,
     this.onChangeEnd,
   });
@@ -26,33 +22,30 @@ class SeekBar extends StatefulWidget {
 
 class _SeekBarState extends State<SeekBar> {
   double? _dragValue;
-  late SliderThemeData _sliderThemeData;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _sliderThemeData = SliderTheme.of(context).copyWith(
-      trackHeight: 2.0,
-    );
-  }
+  bool _dragging = false;
 
   @override
   Widget build(BuildContext context) {
+    final value = min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
+        widget.duration.inMilliseconds.toDouble());
+    if (_dragValue != null && !_dragging) {
+      _dragValue = null;
+    }
     return Stack(
       children: [
-        SliderTheme(
-          data: _sliderThemeData.copyWith(
-            thumbShape: HiddenThumbComponentShape(),
-            activeTrackColor: Colors.blue.shade100,
-            inactiveTrackColor: Colors.grey.shade300,
-          ),
-          child: ExcludeSemantics(
-            child: Slider(
+        SizedBox(
+            width: 350,
+            height: 40,
+            child: CupertinoSlider(
               min: 0.0,
-              max: widget.duration.inMilliseconds.toDouble(),
-              value: widget.bufferedPosition.inMilliseconds.toDouble(),
+              max: widget.duration.inMilliseconds.toDouble() == 0
+                  ? 1.0
+                  : widget.duration.inMilliseconds.toDouble(),
+              value: value,
               onChanged: (value) {
+                if (!_dragging) {
+                  _dragging = true;
+                }
                 setState(() {
                   _dragValue = value;
                 });
@@ -64,36 +57,9 @@ class _SeekBarState extends State<SeekBar> {
                 if (widget.onChangeEnd != null) {
                   widget.onChangeEnd!(Duration(milliseconds: value.round()));
                 }
-                _dragValue = null;
+                _dragging = false;
               },
-            ),
-          ),
-        ),
-        SliderTheme(
-          data: _sliderThemeData.copyWith(
-            inactiveTrackColor: Colors.transparent,
-          ),
-          child: Slider(
-            min: 0.0,
-            max: widget.duration.inMilliseconds.toDouble(),
-            value: min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-                widget.duration.inMilliseconds.toDouble()),
-            onChanged: (value) {
-              setState(() {
-                _dragValue = value;
-              });
-              if (widget.onChanged != null) {
-                widget.onChanged!(Duration(milliseconds: value.round()));
-              }
-            },
-            onChangeEnd: (value) {
-              if (widget.onChangeEnd != null) {
-                widget.onChangeEnd!(Duration(milliseconds: value.round()));
-              }
-              _dragValue = null;
-            },
-          ),
-        ),
+            )),
         Positioned(
           right: 16.0,
           bottom: 0.0,
@@ -102,7 +68,7 @@ class _SeekBarState extends State<SeekBar> {
                       .firstMatch("$_remaining")
                       ?.group(1) ??
                   '$_remaining',
-              style: Theme.of(context).textTheme.caption),
+              style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle),
         ),
       ],
     );

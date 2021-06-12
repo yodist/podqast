@@ -1,13 +1,16 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/component/player/Player2ControlButtons.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:flutter/widgets.dart';
+
+import 'component/player/SeekBar.dart';
+import 'model/MediaState.dart';
+import 'model/QueueState.dart';
 
 class PlayerPage2 extends StatelessWidget {
   @override
@@ -95,7 +98,8 @@ class PlayerPage2 extends StatelessWidget {
                                   SizedBox(
                                       width: 64.0,
                                       height: 48.0,
-                                      child: Center(child: rewindButton())),
+                                      child: Center(
+                                          child: AudioControl.rewindButton())),
                                   StreamBuilder<PlaybackState>(
                                     stream: AudioService.playbackStateStream,
                                     builder: (context, snapshot) {
@@ -118,10 +122,13 @@ class PlayerPage2 extends StatelessWidget {
                                               child: buffering
                                                   ? CupertinoActivityIndicator()
                                                   : playing
-                                                      ? pauseButton()
+                                                      ? AudioControl
+                                                          .pauseButton()
                                                       : completed
-                                                          ? replayButton()
-                                                          : playButton(),
+                                                          ? AudioControl
+                                                              .replayButton()
+                                                          : AudioControl
+                                                              .playButton(),
                                             ),
                                           ),
                                         ],
@@ -131,8 +138,9 @@ class PlayerPage2 extends StatelessWidget {
                                   SizedBox(
                                       width: 64.0,
                                       height: 48.0,
-                                      child:
-                                          Center(child: fastForwardButton())),
+                                      child: Center(
+                                          child: AudioControl
+                                              .fastForwardButton())),
                                   // replayButton(),
                                 ],
                               ),
@@ -211,179 +219,4 @@ class PlayerPage2 extends StatelessWidget {
           AudioService.queueStream,
           AudioService.currentMediaItemStream,
           (queue, mediaItem) => QueueState(queue, mediaItem));
-
-  // IconButton playButton() => IconButton(
-  //       icon: Icon(Icons.play_arrow_rounded),
-  //       iconSize: 48.0,
-  //       onPressed: AudioService.play,
-  //     );
-
-  // IconButton pauseButton() => IconButton(
-  //       icon: Icon(Icons.pause_circle_filled_rounded),
-  //       iconSize: 48.0,
-  //       onPressed: AudioService.pause,
-  //     );
-
-  // IconButton stopButton() => IconButton(
-  //       icon: Icon(Icons.stop),
-  //       iconSize: 48.0,
-  //       onPressed: AudioService.stop,
-  //     );
-
-  // IconButton replayButton() => IconButton(
-  //       icon: Icon(Icons.replay),
-  //       iconSize: 42.0,
-  //       onPressed: () async {
-  //         await AudioService.seekTo(Duration.zero);
-  //         AudioService.play();
-  //       },
-  //     );
-
-  // IconButton rewindButton() => IconButton(
-  //       icon: Icon(Icons.fast_rewind_rounded),
-  //       iconSize: 42.0,
-  //       onPressed: () => AudioService.rewind(),
-  //     );
-
-  // IconButton fastForwardButton() => IconButton(
-  //       icon: Icon(Icons.fast_forward_rounded),
-  //       iconSize: 42.0,
-  //       onPressed: () => AudioService.fastForward(),
-  //     );
-
-  CupertinoButton playButton() => CupertinoButton(
-        child: Icon(
-          CupertinoIcons.play_circle,
-          size: 48.0,
-        ),
-        onPressed: AudioService.play,
-      );
-
-  CupertinoButton pauseButton() => CupertinoButton(
-        child: Icon(
-          CupertinoIcons.pause_circle_fill,
-          size: 48,
-        ),
-        onPressed: AudioService.pause,
-      );
-
-  CupertinoButton stopButton() => CupertinoButton(
-        child: Icon(Icons.stop, size: 48.0),
-        onPressed: AudioService.stop,
-      );
-
-  CupertinoButton replayButton() => CupertinoButton(
-        child: Icon(
-          Icons.replay,
-          size: 42,
-        ),
-        onPressed: () async {
-          await AudioService.seekTo(Duration.zero);
-          AudioService.play();
-        },
-      );
-
-  CupertinoButton rewindButton() => CupertinoButton(
-        child: Icon(
-          CupertinoIcons.backward_fill,
-          size: 36.0,
-        ),
-        onPressed: () => AudioService.rewind(),
-      );
-
-  CupertinoButton fastForwardButton() => CupertinoButton(
-        child: Icon(
-          CupertinoIcons.forward_fill,
-          size: 36.0,
-        ),
-        onPressed: () => AudioService.fastForward(),
-      );
-}
-
-class QueueState {
-  final List<MediaItem>? queue;
-  final MediaItem? mediaItem;
-
-  QueueState(this.queue, this.mediaItem);
-}
-
-class MediaState {
-  final MediaItem? mediaItem;
-  final Duration position;
-
-  MediaState(this.mediaItem, this.position);
-}
-
-class SeekBar extends StatefulWidget {
-  final Duration duration;
-  final Duration position;
-  final ValueChanged<Duration>? onChanged;
-  final ValueChanged<Duration>? onChangeEnd;
-
-  SeekBar({
-    required this.duration,
-    required this.position,
-    this.onChanged,
-    this.onChangeEnd,
-  });
-
-  @override
-  _SeekBarState createState() => _SeekBarState();
-}
-
-class _SeekBarState extends State<SeekBar> {
-  double? _dragValue;
-  bool _dragging = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final value = min(_dragValue ?? widget.position.inMilliseconds.toDouble(),
-        widget.duration.inMilliseconds.toDouble());
-    if (_dragValue != null && !_dragging) {
-      _dragValue = null;
-    }
-    return Stack(
-      children: [
-        SizedBox(
-            width: 350,
-            height: 40,
-            child: CupertinoSlider(
-              min: 0.0,
-              max: widget.duration.inMilliseconds.toDouble() == 0
-                  ? 1.0
-                  : widget.duration.inMilliseconds.toDouble(),
-              value: value,
-              onChanged: (value) {
-                if (!_dragging) {
-                  _dragging = true;
-                }
-                setState(() {
-                  _dragValue = value;
-                });
-                if (widget.onChanged != null) {
-                  widget.onChanged!(Duration(milliseconds: value.round()));
-                }
-              },
-              onChangeEnd: (value) {
-                if (widget.onChangeEnd != null) {
-                  widget.onChangeEnd!(Duration(milliseconds: value.round()));
-                }
-                _dragging = false;
-              },
-            )),
-        Positioned(
-          right: 16.0,
-          bottom: 0.0,
-          child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
-                      ?.group(1) ??
-                  '$_remaining',
-              style: CupertinoTheme.of(context).textTheme.tabLabelTextStyle),
-        ),
-      ],
-    );
-  }
-
-  Duration get _remaining => widget.duration - widget.position;
 }
