@@ -1,8 +1,11 @@
+import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/PlayerPage.dart';
+import 'package:flutter_application_1/MainProvider.dart';
+import 'package:flutter_application_1/PlayerPage2.dart';
 import 'package:flutter_application_1/PodcastDetailPage.dart';
 import 'package:flutter_application_1/util/StringUtil.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class EpisodeCard extends StatelessWidget {
   EpisodeCard(this.episodeId,
@@ -13,6 +16,7 @@ class EpisodeCard extends StatelessWidget {
       this.subtitle = "",
       required this.imageUrl,
       required this.duration,
+      required this.durationDur,
       required this.releaseDate,
       this.publisher = "",
       this.fileSize = "0 MB",
@@ -27,6 +31,7 @@ class EpisodeCard extends StatelessWidget {
   final String subtitle;
   final String releaseDate;
   final String duration;
+  final Duration durationDur;
   final String publisher;
   final String fileSize;
   final String audioUri;
@@ -39,7 +44,7 @@ class EpisodeCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
                 builder: (context) => PodcastDetailPage(
                       this.episodeId,
                       title: this.title,
@@ -77,16 +82,15 @@ class EpisodeCard extends StatelessWidget {
                 ),
                 Text(
                   this.releaseDate,
-                  style: GoogleFonts.robotoCondensed(
-                      fontSize: 16, color: Colors.black),
+                  style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 SizedBox(
                   width: 20,
                 ),
                 Text(
                   this.duration,
-                  style: GoogleFonts.robotoCondensed(
-                      fontSize: 16,
+                  style: TextStyle(
+                      fontSize: 14,
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
@@ -99,17 +103,50 @@ class EpisodeCard extends StatelessWidget {
                     Icons.play_circle_outline,
                     size: 30,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
+                    context.read<MainProvider>().showPlayer();
+                    List<MediaItem> playlist = <MediaItem>[
+                      MediaItem(
+                        // This can be any unique id, but we use the audio URL for convenience.
+                        id: this.audioUri,
+                        album: this.title,
+                        title: this.podcastTitle,
+                        artist: this.publisher,
+                        duration: durationDur,
+                        artUri: Uri.parse(this.imageUrl),
+                      ),
+                    ];
+                    await AudioService.updateQueue(playlist);
+                    await AudioService.skipToQueueItem(playlist[0].id);
+                    // if (ConfigUtil.currentOverlay != null) {
+                    //   ConfigUtil.currentOverlay!.dismiss();
+                    // }
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PlayerPage(
-                                audioUri: this.audioUri,
-                                album: this.publisher,
-                                artwork: this.imageUrl,
-                                title: this.title,
-                              )),
+                          // builder: (context) => PlayerPage(
+                          //       audioUri: this.audioUri,
+                          //       album: this.publisher,
+                          //       artwork: this.imageUrl,
+                          //       title: this.title,
+                          //     )),
+                          builder: (context) => PlayerPage2()),
                     );
+                    // .then((context) {
+                    //   ConfigUtil.currentOverlay = showOverlayNotification(
+                    //       (context) {
+                    //     return OverlayPlayer(
+                    //       key: ValueKey('AudioPlayer'),
+                    //       message: 'x',
+                    //       onReply: () {
+                    //         OverlaySupportEntry.of(context)!.dismiss();
+                    //         toast('you checked this message');
+                    //       },
+                    //     );
+                    //   },
+                    //       position: NotificationPosition.bottom,
+                    //       duration: Duration.zero);
+                    // });
                   },
                 ),
                 SizedBox(

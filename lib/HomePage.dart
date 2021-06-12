@@ -1,7 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/MainProvider.dart';
+import 'package:flutter_application_1/component/OverlayPlayer.dart';
 import 'package:flutter_application_1/service/PodcastService.dart';
 import 'package:flutter_application_1/widget/PodcastSearch.dart';
-import 'package:flutter_application_1/widget/podcastHome.dart';
+import 'package:flutter_application_1/widget/PodcastHomeTab.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:provider/provider.dart';
+
+import 'component/audio/AudioPlayerTask.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
@@ -13,6 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   PodcastService podcastService = PodcastService();
 
   late PageController _pageController;
@@ -26,17 +34,31 @@ class _HomePageState extends State<HomePage> {
       _pageController.animateToPage(index,
           duration: Duration(milliseconds: 250), curve: Curves.ease);
     });
+    // showSimpleNotification(Text("Hello"),
+    //     position: NotificationPosition.bottom,
+    //     slideDismissDirection: DismissDirection.down,
+    //     autoDismiss: false);
   }
 
   @override
   void initState() {
     super.initState();
 
+    AudioService.start(
+      backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
+      androidNotificationChannelName: 'PodQast',
+      // Enable this if you want the Android service to exit the foreground state on pause.
+      //androidStopForegroundOnPause: true,
+      androidNotificationColor: 0xFF2196f3,
+      androidNotificationIcon: 'mipmap/ic_launcher',
+      androidEnableQueue: true,
+    );
+
     _pageController = PageController();
     futureBestPod = podcastService.fetchBestPodcasts();
 
     _widgetOptions = <Widget>[
-      podcastHome(futureBestPod),
+      PodcastHomeTab(data: futureBestPod),
       PodcastSearch(),
     ];
   }
@@ -50,16 +72,17 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
-        child: AppBar(
-          title: Image(
-            image: AssetImage('assets/image/PodQast.png'),
-            height: 35,
-          ),
-          backgroundColor: Colors.white,
-        ),
-      ),
+      key: _scaffoldKey,
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(60.0),
+      //   child: AppBar(
+      //     title: Image(
+      //       image: AssetImage('assets/image/PodQast.png'),
+      //       height: 35,
+      //     ),
+      //     backgroundColor: Colors.white,
+      //   ),
+      // ),
       body: SizedBox.expand(
           child: PageView(
         controller: _pageController,
@@ -70,6 +93,11 @@ class _HomePageState extends State<HomePage> {
         },
         children: _widgetOptions,
       )),
+      persistentFooterButtons: <Widget>[
+        Visibility(
+            visible: context.watch<MainProvider>().showMiniPlayer,
+            child: Container(height: 120, width: 400, child: OverlayPlayer())),
+      ],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -87,4 +115,9 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+// NOTE: Your entrypoint MUST be a top-level function.
+void _audioPlayerTaskEntrypoint() async {
+  AudioServiceBackground.run(() => AudioPlayerTask());
 }
