@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/PodcastListPage.dart';
-import 'package:flutter_application_1/util/StringUtil.dart';
+import 'package:flutter_application_1/podcast_list_page.dart';
+import 'package:flutter_application_1/util/string_util.dart';
 
 class MyCard extends StatelessWidget {
   MyCard(

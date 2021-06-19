@@ -1,11 +1,11 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/PlayerPage2.dart';
-import 'package:flutter_application_1/component/player/Player2ControlButtons.dart';
-import 'package:flutter_application_1/component/player/SeekBar.dart';
-import 'package:flutter_application_1/model/MediaState.dart';
-import 'package:flutter_application_1/model/QueueState.dart';
+import 'package:flutter_application_1/player_page2.dart';
+import 'package:flutter_application_1/component/player/audio_control.dart';
+import 'package:flutter_application_1/component/player/seek_bar.dart';
+import 'package:flutter_application_1/model/media_state.dart';
+import 'package:flutter_application_1/model/queue_state.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OverlayPlayer extends StatelessWidget {
