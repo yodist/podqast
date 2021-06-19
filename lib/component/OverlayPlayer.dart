@@ -1,8 +1,11 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/PlayerPage2.dart';
 import 'package:flutter_application_1/component/player/Player2ControlButtons.dart';
-import 'package:flutter_application_1/example/AudioServiceExample.dart';
+import 'package:flutter_application_1/component/player/SeekBar.dart';
+import 'package:flutter_application_1/model/MediaState.dart';
+import 'package:flutter_application_1/model/QueueState.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OverlayPlayer extends StatelessWidget {
@@ -40,19 +43,46 @@ class OverlayPlayer extends StatelessWidget {
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
                     minVerticalPadding: 0,
-                    leading: FittedBox(
-                      child: artwork == null
-                          ? Image.asset('assets/image/PodQast.png')
-                          : Image.network(
-                              artwork,
-                            ),
-                      fit: BoxFit.fill,
+                    leading: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlayerPage2()),
+                        );
+                      },
+                      child: FittedBox(
+                        child: artwork == null
+                            ? Image.asset('assets/image/PodQast.png')
+                            : Image.network(
+                                artwork,
+                              ),
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                    title: Text(
-                      mediaItem?.title ?? "No Title",
+                    title: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlayerPage2()),
+                        );
+                      },
+                      child: Text(
+                        mediaItem?.title ?? "No Title",
+                      ),
                     ),
-                    subtitle: Text(
-                      mediaItem?.album ?? "No Album",
+                    subtitle: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlayerPage2()),
+                        );
+                      },
+                      child: Text(
+                        mediaItem?.album ?? "No Album",
+                      ),
                     ),
                     trailing: StreamBuilder<PlaybackState>(
                       stream: AudioService.playbackStateStream,
