@@ -118,35 +118,10 @@ class EpisodeCard extends StatelessWidget {
                     ];
                     await AudioService.updateQueue(playlist);
                     await AudioService.skipToQueueItem(playlist[0].id);
-                    // if (ConfigUtil.currentOverlay != null) {
-                    //   ConfigUtil.currentOverlay!.dismiss();
-                    // }
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          // builder: (context) => PlayerPage(
-                          //       audioUri: this.audioUri,
-                          //       album: this.publisher,
-                          //       artwork: this.imageUrl,
-                          //       title: this.title,
-                          //     )),
-                          builder: (context) => PlayerPage2()),
+                      MaterialPageRoute(builder: (context) => PlayerPage2()),
                     );
-                    // .then((context) {
-                    //   ConfigUtil.currentOverlay = showOverlayNotification(
-                    //       (context) {
-                    //     return OverlayPlayer(
-                    //       key: ValueKey('AudioPlayer'),
-                    //       message: 'x',
-                    //       onReply: () {
-                    //         OverlaySupportEntry.of(context)!.dismiss();
-                    //         toast('you checked this message');
-                    //       },
-                    //     );
-                    //   },
-                    //       position: NotificationPosition.bottom,
-                    //       duration: Duration.zero);
-                    // });
                   },
                 ),
                 SizedBox(
