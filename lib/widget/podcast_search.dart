@@ -6,6 +6,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_typeahead/cupertino_flutter_typeahead.dart';
 import 'package:cupertino_list_tile/cupertino_list_tile.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 class PodcastSearch extends StatefulWidget {
   @override
@@ -15,6 +17,15 @@ class PodcastSearch extends StatefulWidget {
 class _PodcastSearchState extends State<PodcastSearch> {
   PodcastService podcastService = PodcastService();
   final TextEditingController _typeAheadController = TextEditingController();
+
+  late Future<Map<String, dynamic>> genreData;
+
+  @override
+  void initState() {
+    super.initState();
+
+    genreData = podcastService.fetchGenres();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +42,12 @@ class _PodcastSearchState extends State<PodcastSearch> {
         child: Container(
             margin: const EdgeInsets.all(10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 CupertinoTypeAheadFormField(
                   textFieldConfiguration: CupertinoTextFieldConfiguration(
-                      autofocus: true,
+                      autofocus: false,
                       style: DefaultTextStyle.of(context)
                           .style
                           .copyWith(fontStyle: FontStyle.italic, fontSize: 18),
@@ -67,7 +80,87 @@ class _PodcastSearchState extends State<PodcastSearch> {
                               publisher: sugg['publisher_original'],
                             )));
                   },
-                )
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  child: Text(
+                    'Category',
+                    style: GoogleFonts.openSans(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo[400]),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: FutureBuilder(
+                    future: genreData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        var colorList = [
+                          0xFF5865f2,
+                          0xFFed4245,
+                          0xFF9656ce,
+                          0xFF5b209a,
+                          0xFFe8cd02,
+                          0xFF44ddbf,
+                          0xfff47b68,
+                          0xfff57731,
+                          0xfff9c9a9,
+                        ];
+                        return GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 2,
+                          ),
+                          itemCount: (snapshot.data! as Map)['genres'].length,
+                          itemBuilder: (_, int position) {
+                            var snapshotData = (snapshot.data! as Map);
+                            var name =
+                                snapshotData['genres'][position]['name'] ?? '';
+                            return
+                                // Row(
+                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                //   mainAxisSize: MainAxisSize.min,
+                                //   children: [
+                                Card(
+                              child: InkWell(
+                                splashColor: Colors.blue.withAlpha(30),
+                                onTap: () {},
+                                child: Container(
+                                  color: Color(
+                                      colorList[position % colorList.length]),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                      name,
+                                      style: GoogleFonts.openSans(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                            //   ],
+                            // );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                  ),
+                ),
               ],
             )));
   }
