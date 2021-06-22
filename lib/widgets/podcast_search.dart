@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/podcast_list_page.dart';
+import 'package:flutter_application_1/screens/podcast_list_page.dart';
 import 'package:flutter_application_1/service/podcast_service.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_typeahead/cupertino_flutter_typeahead.dart';
-import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:overlay_support/overlay_support.dart';
 
 class PodcastSearch extends StatefulWidget {
   @override

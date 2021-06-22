@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/component/epsiode_card.dart';
+import 'package:flutter_application_1/widgets/epsiode_card.dart';
 import 'package:flutter_application_1/service/podcast_service.dart';
 import 'package:flutter_application_1/util/file_util.dart';
 import 'package:flutter_application_1/util/string_util.dart';

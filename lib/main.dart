@@ -1,8 +1,8 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/home_page.dart';
-import 'package:flutter_application_1/main_provider.dart';
+import 'package:flutter_application_1/screens/home_page.dart';
+import 'package:flutter_application_1/providers/main_provider.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 

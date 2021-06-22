@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/podcast_list_page.dart';
+import 'package:flutter_application_1/screens/podcast_list_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget podcastBlock(

@@ -1,9 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/main_provider.dart';
-import 'package:flutter_application_1/player_page2.dart';
-import 'package:flutter_application_1/podcast_detail_page.dart';
+import 'package:flutter_application_1/providers/main_provider.dart';
+import 'package:flutter_application_1/screens/player_page2.dart';
+import 'package:flutter_application_1/screens/podcast_detail_page.dart';
 import 'package:flutter_application_1/util/string_util.dart';
 import 'package:provider/provider.dart';
 

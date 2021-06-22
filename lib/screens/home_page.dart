@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/main_provider.dart';
-import 'package:flutter_application_1/component/overlay_player.dart';
+import 'package:flutter_application_1/providers/main_provider.dart';
+import 'package:flutter_application_1/widgets/overlay_player.dart';
 import 'package:flutter_application_1/service/podcast_service.dart';
-import 'package:flutter_application_1/widget/podcast_search.dart';
-import 'package:flutter_application_1/widget/podcast_home_tab.dart';
+import 'package:flutter_application_1/widgets/podcast_search.dart';
+import 'package:flutter_application_1/widgets/podcast_home_tab.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 
-import 'component/audio/audio_player_task.dart';
+import '../service/audio/audio_player_task.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title}) : super(key: key);
