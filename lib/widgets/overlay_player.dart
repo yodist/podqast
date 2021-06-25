@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/model/media_state.dart';
@@ -54,8 +55,15 @@ class OverlayPlayer extends StatelessWidget {
                       child: FittedBox(
                         child: artwork == null
                             ? Image.asset('assets/image/PodQast.png')
-                            : Image.network(
-                                artwork,
+                            : CachedNetworkImage(
+                                imageUrl: artwork,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.grey.shade200),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                               ),
                         fit: BoxFit.fill,
                       ),

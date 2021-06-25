@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/util/string_util.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -142,8 +143,13 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> {
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image(
-                image: NetworkImage(imageUrl),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                placeholder: (context, url) => CircularProgressIndicator(
+                  valueColor:
+                      new AlwaysStoppedAnimation<Color>(Colors.grey.shade200),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
           ),

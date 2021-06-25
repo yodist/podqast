@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/widgets/epsiode_card.dart';
@@ -77,10 +78,18 @@ class _PodcastListPageState extends State<PodcastListPage> {
                           Container(
                             margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
                             width: 150.0,
+                            height: 150.0,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10.0),
-                              child: Image(
-                                image: NetworkImage(snapshotData['image']),
+                              child: CachedNetworkImage(
+                                imageUrl: snapshotData['image'],
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(
+                                  valueColor: new AlwaysStoppedAnimation<Color>(
+                                      Colors.grey.shade200),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
                               ),
                             ),
                           ),

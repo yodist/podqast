@@ -1,7 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/podcast_list_page.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 Widget podcastBlock(
     BuildContext context, String id, String imageUrl, String title,
@@ -28,11 +28,17 @@ Widget podcastBlock(
         Container(
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
-            child: Image(
-              image: NetworkImage(imageUrl),
+            child: CachedNetworkImage(
+              imageUrl: imageUrl,
+              placeholder: (context, url) => CircularProgressIndicator(
+                valueColor:
+                    new AlwaysStoppedAnimation<Color>(Colors.grey.shade200),
+              ),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
           width: 170.0,
+          height: 170.0,
           margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
         ),
         Container(

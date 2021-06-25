@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screens/podcast_list_page.dart';
 import 'package:flutter_application_1/util/string_util.dart';
@@ -34,8 +35,13 @@ class MyCard extends StatelessWidget {
           children: <Widget>[
             SizedBox(height: 10),
             ListTile(
-              leading: Image(
-                image: NetworkImage(iconUrl),
+              leading: CachedNetworkImage(
+                imageUrl: iconUrl,
+                placeholder: (context, url) => CircularProgressIndicator(
+                  valueColor:
+                      new AlwaysStoppedAnimation<Color>(Colors.grey.shade200),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
               title: Text(title),
               subtitle: Text(
