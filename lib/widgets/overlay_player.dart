@@ -78,6 +78,8 @@ class OverlayPlayer extends StatelessWidget {
                       },
                       child: Text(
                         mediaItem?.title ?? "No Title",
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
                       ),
                     ),
                     subtitle: InkWell(
@@ -90,6 +92,8 @@ class OverlayPlayer extends StatelessWidget {
                       },
                       child: Text(
                         mediaItem?.album ?? "No Album",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     trailing: StreamBuilder<PlaybackState>(

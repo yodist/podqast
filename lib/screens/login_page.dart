@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:podqast/screens/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -25,8 +26,11 @@ class _BodyState extends State<Body> {
 
   void click() {
     signInWithGoogle().then((user) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => HomePage(title: "PodQast")));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AudioServiceWidget(child: HomePage(title: "PodQast"))));
     });
   }
 
