@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:podqast/providers/main_provider.dart';
 import 'package:podqast/widgets/overlay_player.dart';
-import 'package:podqast/service/podcast_service.dart';
 import 'package:podqast/widgets/podcast_search.dart';
 import 'package:podqast/widgets/podcast_home_tab.dart';
 import 'package:audio_service/audio_service.dart';
@@ -21,12 +20,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  PodcastService podcastService = PodcastService();
 
   late PageController _pageController;
   int _selectedIndex = 0;
   late List<Widget> _widgetOptions;
-  late Future<Map<String, dynamic>> futureBestPod;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -55,10 +52,9 @@ class _HomePageState extends State<HomePage> {
     );
 
     _pageController = PageController();
-    futureBestPod = podcastService.fetchBestPodcasts();
 
     _widgetOptions = <Widget>[
-      PodcastHomeTab(data: futureBestPod),
+      PodcastHomeTab(),
       PodcastSearch(),
     ];
   }

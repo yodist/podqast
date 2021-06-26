@@ -1,14 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:podqast/service/podcast_service.dart';
 import 'package:podqast/widgets/podcast_block.dart';
 
-class PodcastHomeTab extends StatelessWidget {
-  final Future<Map<String, dynamic>> data;
+class PodcastHomeTab extends StatefulWidget {
+  @override
+  _PodcastHomeTabState createState() => _PodcastHomeTabState();
+}
 
-  PodcastHomeTab({required this.data});
+class _PodcastHomeTabState extends State<PodcastHomeTab>
+    with AutomaticKeepAliveClientMixin<PodcastHomeTab> {
+  PodcastService podcastService = PodcastService();
+  late Future<Map<String, dynamic>> data;
+
+  @override
+  void initState() {
+    super.initState();
+
+    data = podcastService.fetchBestPodcasts();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           heroTag: 'tab1',
