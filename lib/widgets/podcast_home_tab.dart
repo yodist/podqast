@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/widgets/podcast_block.dart';
+import 'package:podqast/widgets/podcast_block.dart';
 
 class PodcastHomeTab extends StatelessWidget {
   final Future<Map<String, dynamic>> data;

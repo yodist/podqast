@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/podcast_list_page.dart';
-import 'package:flutter_application_1/service/podcast_service.dart';
+import 'package:podqast/screens/podcast_list_page.dart';
+import 'package:podqast/service/podcast_service.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:flutter_typeahead/cupertino_flutter_typeahead.dart';

@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/model/media_state.dart';
-import 'package:flutter_application_1/model/queue_state.dart';
-import 'package:flutter_application_1/widgets/player/audio_control.dart';
-import 'package:flutter_application_1/widgets/player/seek_bar.dart';
+import 'package:podqast/model/media_state.dart';
+import 'package:podqast/model/queue_state.dart';
+import 'package:podqast/widgets/player/audio_control.dart';
+import 'package:podqast/widgets/player/seek_bar.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:flutter/widgets.dart';

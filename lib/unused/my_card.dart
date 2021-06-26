@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/podcast_list_page.dart';
-import 'package:flutter_application_1/util/string_util.dart';
+import 'package:podqast/screens/podcast_list_page.dart';
+import 'package:podqast/util/string_util.dart';
 
 class MyCard extends StatelessWidget {
   MyCard(

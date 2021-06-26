@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/service/podcast_service.dart';
-import 'package:flutter_application_1/unused/my_card.dart';
+import 'package:podqast/service/podcast_service.dart';
+import 'package:podqast/unused/my_card.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({required Key key, required this.title}) : super(key: key);

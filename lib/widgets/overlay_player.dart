@@ -2,11 +2,11 @@ import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/model/media_state.dart';
-import 'package:flutter_application_1/model/queue_state.dart';
-import 'package:flutter_application_1/screens/player_page2.dart';
-import 'package:flutter_application_1/widgets/player/audio_control.dart';
-import 'package:flutter_application_1/widgets/player/seek_bar.dart';
+import 'package:podqast/model/media_state.dart';
+import 'package:podqast/model/queue_state.dart';
+import 'package:podqast/screens/player_page2.dart';
+import 'package:podqast/widgets/player/audio_control.dart';
+import 'package:podqast/widgets/player/seek_bar.dart';
 import 'package:rxdart/rxdart.dart';
 
 class OverlayPlayer extends StatelessWidget {

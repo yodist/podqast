@@ -2,10 +2,10 @@ import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/main_provider.dart';
-import 'package:flutter_application_1/screens/player_page2.dart';
-import 'package:flutter_application_1/screens/podcast_detail_page.dart';
-import 'package:flutter_application_1/util/string_util.dart';
+import 'package:podqast/providers/main_provider.dart';
+import 'package:podqast/screens/player_page2.dart';
+import 'package:podqast/screens/podcast_detail_page.dart';
+import 'package:podqast/util/string_util.dart';
 import 'package:provider/provider.dart';
 
 class EpisodeCard extends StatelessWidget {

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/providers/main_provider.dart';
-import 'package:flutter_application_1/widgets/overlay_player.dart';
-import 'package:flutter_application_1/service/podcast_service.dart';
-import 'package:flutter_application_1/widgets/podcast_search.dart';
-import 'package:flutter_application_1/widgets/podcast_home_tab.dart';
+import 'package:podqast/providers/main_provider.dart';
+import 'package:podqast/widgets/overlay_player.dart';
+import 'package:podqast/service/podcast_service.dart';
+import 'package:podqast/widgets/podcast_search.dart';
+import 'package:podqast/widgets/podcast_home_tab.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:provider/provider.dart';
 
