@@ -12,7 +12,8 @@ class PodcastSearch extends StatefulWidget {
   _PodcastSearchState createState() => _PodcastSearchState();
 }
 
-class _PodcastSearchState extends State<PodcastSearch> {
+class _PodcastSearchState extends State<PodcastSearch>
+    with AutomaticKeepAliveClientMixin<PodcastSearch> {
   PodcastService podcastService = PodcastService();
   final TextEditingController _typeAheadController = TextEditingController();
 
@@ -26,7 +27,11 @@ class _PodcastSearchState extends State<PodcastSearch> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           heroTag: 'tab2',
@@ -106,10 +111,10 @@ class _PodcastSearchState extends State<PodcastSearch> {
                           0xFF9656ce,
                           0xFF5b209a,
                           0xFFe8cd02,
-                          0xFF44ddbf,
-                          0xfff47b68,
-                          0xfff57731,
-                          0xfff9c9a9,
+                          0xFF3065d2,
+                          0xFFf47b68,
+                          0xFFf57731,
+                          0xFFf9c9a9,
                         ];
                         return GridView.builder(
                           gridDelegate:
@@ -128,20 +133,23 @@ class _PodcastSearchState extends State<PodcastSearch> {
                                 //   mainAxisSize: MainAxisSize.min,
                                 //   children: [
                                 Card(
+                              color:
+                                  Color(colorList[position % colorList.length]),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: InkWell(
                                 splashColor: Colors.blue.withAlpha(30),
                                 onTap: () {},
                                 child: Container(
-                                  color: Color(
-                                      colorList[position % colorList.length]),
+                                  // color: Color(
+                                  //     colorList[position % colorList.length]),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10),
                                     child: Text(
                                       name,
                                       style: GoogleFonts.openSans(
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
+                                          fontSize: 22, color: Colors.white),
                                     ),
                                   ),
                                 ),

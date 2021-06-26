@@ -1,4 +1,5 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Widget firstWidget = LoginPage();
+
+    if (FirebaseAuth.instance.currentUser != null) {
+      firstWidget = HomePage(title: 'Podqast');
+    }
+
     return OverlaySupport.global(
         child: CupertinoApp(
       debugShowCheckedModeBanner: false,
@@ -41,9 +48,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
       home: AudioServiceWidget(
-        child: HomePage(
-          title: "PodQast",
-        ),
+        // child: HomePage(
+        //   title: "PodQast",
+        // ),
+        child: firstWidget,
       ),
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         DefaultMaterialLocalizations.delegate,

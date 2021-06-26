@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:podqast/providers/main_provider.dart';
 import 'package:podqast/screens/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:podqast/service/authentication.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -26,11 +24,8 @@ class _BodyState extends State<Body> {
   }
 
   void click() {
-    // Navigator.pushReplacement(context,
-    //     MaterialPageRoute(builder: (context) => HomePage(title: "PodQast")));
     signInWithGoogle().then((user) {
-      context.read<MainProvider>().setUser(user);
-      Navigator.push(context,
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => HomePage(title: "PodQast")));
     });
   }
