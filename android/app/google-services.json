@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "804394188461",
+    "project_id": "podqast-e021f",
+    "storage_bucket": "podqast-e021f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804394188461:android:e81bb03f86bae2a733d024",
+        "android_client_info": {
+          "package_name": "com.yodist.podqast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804394188461-49op4jvmribrnh11reqnf2pd81eboagi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yodist.podqast",
+            "certificate_hash": "6269812adaff876fd45700b39c4ea4eeacafa4de"
+          }
+        },
+        {
+          "client_id": "804394188461-ag19scs6u2sufbrrmhh2oq364bskp1th.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbQnLHaeRWUcfiuCaEWpvvN7AZH1d7dVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804394188461-ag19scs6u2sufbrrmhh2oq364bskp1th.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

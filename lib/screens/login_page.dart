@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:podqast/providers/main_provider.dart';
 import 'package:podqast/screens/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:podqast/service/authentication.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -23,8 +26,13 @@ class _BodyState extends State<Body> {
   }
 
   void click() {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (context) => HomePage(title: "PodQast")));
+    // Navigator.pushReplacement(context,
+    //     MaterialPageRoute(builder: (context) => HomePage(title: "PodQast")));
+    signInWithGoogle().then((user) {
+      context.read<MainProvider>().setUser(user);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => HomePage(title: "PodQast")));
+    });
   }
 
   Widget googleLoginButton() {
@@ -40,8 +48,7 @@ class _BodyState extends State<Body> {
         SizedBox(height: 30),
         Container(
           child: Text(
-            'Listen to your favorite podcast anytime ' +
-                'anywhere and customize your podcast playlist',
+            'Listen your favorite podcasts',
             style: GoogleFonts.robotoCondensed(fontSize: 20),
             textAlign: TextAlign.center,
           ),
