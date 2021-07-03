@@ -196,6 +196,15 @@ class AudioPlayerTask extends BackgroundAudioTask {
 /// from a database or web service.
 class MediaLibrary {
   var items = <MediaItem>[
+    // MediaItem(
+    //   // This can be any unique id, but we use the audio URL for convenience.
+    //   id: "dummy",
+    //   album: "No Podcast",
+    //   title: "No Title",
+    //   artist: "No Publisher",
+    //   duration: Duration(milliseconds: 1000),
+    //   artUri: null,
+    // ),
     MediaItem(
       // This can be any unique id, but we use the audio URL for convenience.
       id: "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",

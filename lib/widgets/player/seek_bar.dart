@@ -38,7 +38,7 @@ class _SeekBarState extends State<SeekBar> {
             height: 40,
             child: CupertinoSlider(
               min: 0.0,
-              max: widget.duration.inMilliseconds.toDouble() == 0
+              max: widget.duration.inMilliseconds.toDouble() < 1
                   ? 1.0
                   : widget.duration.inMilliseconds.toDouble(),
               value: value,

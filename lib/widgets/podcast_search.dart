@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:podqast/screens/podcast_list_page.dart';
+import 'package:podqast/screens/podcast_result_page.dart';
 import 'package:podqast/service/podcast_service.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
@@ -57,32 +58,55 @@ class _PodcastSearchState extends State<PodcastSearch>
                       controller: _typeAheadController,
                       placeholder: 'Search podcast title or publisher name'),
                   suggestionsCallback: (pattern) async {
-                    return await podcastService.getSuggestions(pattern);
+                    return Future.delayed(
+                      Duration(seconds: 1),
+                      () => podcastService.getSuggestions(pattern),
+                    );
+                    // return await podcastService.getSuggestions(pattern);
                   },
-                  itemBuilder: (context, Map<String, dynamic> suggestion) {
+                  itemBuilder: (context, String suggestion) {
                     return Material(
-                        child: ListTile(
-                      leading: Image.network(suggestion['thumbnail']),
-                      title:
-                          Html(data: suggestion['title_highlighted'], style: {
-                        "*": Style(fontSize: FontSize.large),
-                        ".ln-search-highlight":
-                            Style(backgroundColor: Colors.amber),
-                      }),
-                      subtitle: Text(suggestion['publisher_original']),
+                        child: Text(
+                      suggestion,
+                      style: TextStyle(fontSize: 20),
+                    ));
+                  },
+                  noItemsFoundBuilder: (context) {
+                    return Material(
+                        child: Text(
+                      'No items found',
+                      style: TextStyle(fontSize: 20),
                     ));
                   },
                   onSuggestionSelected: (suggestion) {
-                    Map<String, dynamic> sugg =
-                        (suggestion! as Map<String, dynamic>);
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PodcastListPage(
-                              sugg['id'],
-                              title: sugg['title_original'],
-                              imageUrl: sugg['image'],
-                              publisher: sugg['publisher_original'],
-                            )));
+                        builder: (context) =>
+                            PodcastResultPage(suggestion as String)));
                   },
+                  // itemBuilder: (context, Map<String, dynamic> suggestion) {
+                  //   return Material(
+                  //       child: ListTile(
+                  //     leading: Image.network(suggestion['thumbnail']),
+                  //     title:
+                  //         Html(data: suggestion['title_highlighted'], style: {
+                  //       "*": Style(fontSize: FontSize.large),
+                  //       ".ln-search-highlight":
+                  //           Style(backgroundColor: Colors.amber),
+                  //     }),
+                  //     subtitle: Text(suggestion['publisher_original']),
+                  //   ));
+                  // },
+                  // onSuggestionSelected: (suggestion) {
+                  //   Map<String, dynamic> sugg =
+                  //       (suggestion! as Map<String, dynamic>);
+                  //   Navigator.of(context).push(MaterialPageRoute(
+                  //       builder: (context) => PodcastListPage(
+                  //             sugg['id'],
+                  //             title: sugg['title_original'],
+                  //             imageUrl: sugg['image'],
+                  //             publisher: sugg['publisher_original'],
+                  //           )));
+                  // },
                 ),
                 SizedBox(
                   height: 10,

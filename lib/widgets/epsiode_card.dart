@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:podqast/providers/main_provider.dart';
+import 'package:podqast/screens/home_page.dart';
 import 'package:podqast/screens/player_page2.dart';
 import 'package:podqast/screens/podcast_detail_page.dart';
 import 'package:podqast/util/string_util.dart';
@@ -122,6 +123,7 @@ class EpisodeCard extends StatelessWidget {
                         artUri: Uri.parse(this.imageUrl),
                       ),
                     ];
+                    if (!AudioService.running) startAudioService();
                     await AudioService.updateQueue(playlist);
                     await AudioService.skipToQueueItem(playlist[0].id);
                     Navigator.push(

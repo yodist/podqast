@@ -41,15 +41,16 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    AudioService.start(
-      backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
-      androidNotificationChannelName: 'PodQast',
-      // Enable this if you want the Android service to exit the foreground state on pause.
-      //androidStopForegroundOnPause: true,
-      androidNotificationColor: 0xFF2196f3,
-      androidNotificationIcon: 'mipmap/ic_launcher',
-      androidEnableQueue: true,
-    );
+    startAudioService();
+    // AudioService.start(
+    //   backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
+    //   androidNotificationChannelName: 'PodQast',
+    //   // Enable this if you want the Android service to exit the foreground state on pause.
+    //   //androidStopForegroundOnPause: true,
+    //   androidNotificationColor: 0xFF2196f3,
+    //   androidNotificationIcon: 'mipmap/ic_launcher',
+    //   androidEnableQueue: true,
+    // );
 
     _pageController = PageController();
 
@@ -111,6 +112,18 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+void startAudioService() {
+  AudioService.start(
+    backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
+    androidNotificationChannelName: 'PodQast',
+    // Enable this if you want the Android service to exit the foreground state on pause.
+    //androidStopForegroundOnPause: true,
+    androidNotificationColor: 0xFF2196f3,
+    androidNotificationIcon: 'mipmap/ic_launcher',
+    androidEnableQueue: true,
+  );
 }
 
 // NOTE: Your entrypoint MUST be a top-level function.
