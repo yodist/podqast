@@ -16,35 +16,30 @@ class OverlayPlayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      // child: ListTile(
-      //   leading: SizedBox.fromSize(size: const Size(20, 20)),
-      //   title: Text('Boyan'),
-      //   subtitle: Text('Test'),
-      //   trailing: IconButton(icon: Icon(CupertinoIcons.play), onPressed: () {}),
-      // ),
-      child: StreamBuilder<bool>(
-        stream: AudioService.runningStream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.active) {
-            return CircularProgressIndicator();
-          }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // UI to show when we're running, i.e. player state/controls.
-
-              // Queue display/controls.
-              StreamBuilder<QueueState>(
-                stream: _queueStateStream,
-                builder: (context, snapshot) {
-                  final queueState = snapshot.data;
-                  final mediaItem = queueState?.mediaItem;
-                  final artwork = mediaItem?.artUri.toString();
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    minVerticalPadding: 0,
-                    leading: InkWell(
+    return SizedBox(
+      child: SafeArea(
+        // child: ListTile(
+        //   leading: SizedBox.fromSize(size: const Size(20, 20)),
+        //   title: Text('Boyan'),
+        //   subtitle: Text('Test'),
+        //   trailing: IconButton(icon: Icon(CupertinoIcons.play), onPressed: () {}),
+        // ),
+        child: StreamBuilder<bool>(
+          stream: AudioService.runningStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.active) {
+              return CircularProgressIndicator();
+            }
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                StreamBuilder<QueueState>(
+                  stream: _queueStateStream,
+                  builder: (context, snapshot) {
+                    final queueState = snapshot.data;
+                    final mediaItem = queueState?.mediaItem;
+                    final artwork = mediaItem?.artUri.toString();
+                    return InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -52,10 +47,16 @@ class OverlayPlayer extends StatelessWidget {
                               builder: (context) => PlayerPage2()),
                         );
                       },
-                      child: FittedBox(
-                        child: artwork == null
-                            ? Image.asset('assets/image/PodQast.png')
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        minVerticalPadding: 0,
+                        leading: artwork == null
+                            ? Image.asset(
+                                'assets/image/PodQast.png',
+                                fit: BoxFit.fitHeight,
+                              )
                             : CachedNetworkImage(
+                                fit: BoxFit.fitHeight,
                                 imageUrl: artwork,
                                 placeholder: (context, url) =>
                                     CircularProgressIndicator(
@@ -65,83 +66,65 @@ class OverlayPlayer extends StatelessWidget {
                                 errorWidget: (context, url, error) =>
                                     Icon(Icons.error),
                               ),
-                        fit: BoxFit.fill,
+                        title: Text(
+                          mediaItem?.title ?? "No Title",
+                          maxLines: 2,
+                          overflow: TextOverflow.fade,
+                        ),
+                        subtitle: Text(
+                          mediaItem?.album ?? "No Album",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: StreamBuilder<PlaybackState>(
+                          stream: AudioService.playbackStateStream,
+                          builder: (context, snapshot) {
+                            final state = snapshot.data;
+                            final playing = state?.playing ?? false;
+                            final completed = state?.processingState ==
+                                AudioProcessingState.completed;
+                            final buffering = state?.processingState ==
+                                AudioProcessingState.buffering;
+                            return SizedBox(
+                              width: 60,
+                              height: 60,
+                              child: Center(
+                                child: buffering
+                                    ? CupertinoActivityIndicator()
+                                    : playing
+                                        ? AudioControl.miniPauseButton()
+                                        : completed
+                                            ? AudioControl.miniReplayButton()
+                                            : AudioControl.miniPlayButton(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                    title: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PlayerPage2()),
-                        );
-                      },
-                      child: Text(
-                        mediaItem?.title ?? "No Title",
-                        maxLines: 2,
-                        overflow: TextOverflow.fade,
-                      ),
-                    ),
-                    subtitle: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PlayerPage2()),
-                        );
-                      },
-                      child: Text(
-                        mediaItem?.album ?? "No Album",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    trailing: StreamBuilder<PlaybackState>(
-                      stream: AudioService.playbackStateStream,
-                      builder: (context, snapshot) {
-                        final state = snapshot.data;
-                        final playing = state?.playing ?? false;
-                        final completed = state?.processingState ==
-                            AudioProcessingState.completed;
-                        final buffering = state?.processingState ==
-                            AudioProcessingState.buffering;
-                        return SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Center(
-                            child: buffering
-                                ? CupertinoActivityIndicator()
-                                : playing
-                                    ? AudioControl.miniPauseButton()
-                                    : completed
-                                        ? AudioControl.miniReplayButton()
-                                        : AudioControl.miniPlayButton(),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
-              // Play/pause/stop buttons.
+                    );
+                  },
+                ),
+                // Play/pause/stop buttons.
 
-              // A seek bar.
-              StreamBuilder<MediaState>(
-                stream: _mediaStateStream,
-                builder: (context, snapshot) {
-                  final mediaState = snapshot.data;
-                  return SeekBar(
-                    duration: mediaState?.mediaItem?.duration ?? Duration.zero,
-                    position: mediaState?.position ?? Duration.zero,
-                    onChangeEnd: (newPosition) {
-                      AudioService.seekTo(newPosition);
-                    },
-                  );
-                },
-              ),
-            ],
-          );
-        },
+                // A seek bar.
+                StreamBuilder<MediaState>(
+                  stream: _mediaStateStream,
+                  builder: (context, snapshot) {
+                    final mediaState = snapshot.data;
+                    return SeekBar(
+                      duration:
+                          mediaState?.mediaItem?.duration ?? Duration.zero,
+                      position: mediaState?.position ?? Duration.zero,
+                      onChangeEnd: (newPosition) {
+                        AudioService.seekTo(newPosition);
+                      },
+                    );
+                  },
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

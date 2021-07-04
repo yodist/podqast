@@ -123,7 +123,7 @@ class EpisodeCard extends StatelessWidget {
                         artUri: Uri.parse(this.imageUrl),
                       ),
                     ];
-                    if (!AudioService.running) startAudioService();
+                    // if (!AudioService.running) startAudioService();
                     await AudioService.updateQueue(playlist);
                     await AudioService.skipToQueueItem(playlist[0].id);
                     Navigator.push(
