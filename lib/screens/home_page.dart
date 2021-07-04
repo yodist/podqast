@@ -41,16 +41,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    startAudioService();
-    // AudioService.start(
-    //   backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
-    //   androidNotificationChannelName: 'PodQast',
-    //   // Enable this if you want the Android service to exit the foreground state on pause.
-    //   //androidStopForegroundOnPause: true,
-    //   androidNotificationColor: 0xFF2196f3,
-    //   androidNotificationIcon: 'mipmap/ic_launcher',
-    //   androidEnableQueue: true,
-    // );
+    // if (!AudioService.running) {
+    //   startAudioService();
+    // }
 
     _pageController = PageController();
 
@@ -91,9 +84,25 @@ class _HomePageState extends State<HomePage> {
         children: _widgetOptions,
       )),
       persistentFooterButtons: <Widget>[
-        Visibility(
-            visible: context.watch<MainProvider>().showMiniPlayer,
-            child: Container(height: 120, width: 400, child: OverlayPlayer())),
+        // Visibility(
+        //     visible:
+        StreamBuilder<bool>(
+          stream: AudioService.runningStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.active) {
+              // Don't show anything until we've ascertained whether or not the
+              // service is running, since we want to show a different UI in
+              // each case.
+              return SizedBox();
+            }
+            return snapshot.data!
+                ? Container(height: 120, width: 400, child: OverlayPlayer())
+                : SizedBox();
+          },
+        ),
+        // child: Container(height: 120, width: 400, child: OverlayPlayer())
+        // )
+        // ,
       ],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -114,8 +123,8 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-void startAudioService() {
-  AudioService.start(
+Future<void> startAudioService() async {
+  await AudioService.start(
     backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
     androidNotificationChannelName: 'PodQast',
     // Enable this if you want the Android service to exit the foreground state on pause.

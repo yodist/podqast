@@ -31,8 +31,7 @@ class MyApp extends StatelessWidget {
       firstWidget = HomePage(title: 'Podqast');
     }
 
-    return OverlaySupport.global(
-        child: CupertinoApp(
+    return CupertinoApp(
       debugShowCheckedModeBanner: false,
       title: 'PodQast',
       theme: new CupertinoThemeData(
@@ -51,12 +50,12 @@ class MyApp extends StatelessWidget {
         // child: HomePage(
         //   title: "PodQast",
         // ),
-        child: firstWidget,
+        child: OverlaySupport.global(child: firstWidget),
       ),
       localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
         DefaultMaterialLocalizations.delegate,
         DefaultWidgetsLocalizations.delegate,
       ],
-    ));
+    );
   }
 }
