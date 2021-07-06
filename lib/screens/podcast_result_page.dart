@@ -62,10 +62,13 @@ class _PodcastResultPageState extends State<PodcastResultPage> {
                                             builder: (context) =>
                                                 PodcastListPage(
                                                   item['id'],
-                                                  title: item['title_original'],
+                                                  title:
+                                                      item['title_original'] ??
+                                                          '-',
                                                   imageUrl: item['image'],
                                                   publisher: item[
-                                                      'publisher_original'],
+                                                          'publisher_original'] ??
+                                                      '-',
                                                 )));
                                   },
                                   child: Card(
@@ -83,8 +86,8 @@ class _PodcastResultPageState extends State<PodcastResultPage> {
                                                   backgroundColor:
                                                       Colors.amber),
                                             }),
-                                        subtitle:
-                                            Text(item['publisher_original']),
+                                        subtitle: Text(
+                                            item['publisher_original'] ?? '-'),
                                       ),
                                     ),
                                   ),

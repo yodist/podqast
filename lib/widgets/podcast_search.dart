@@ -56,7 +56,12 @@ class _PodcastSearchState extends State<PodcastSearch>
                           .style
                           .copyWith(fontStyle: FontStyle.italic, fontSize: 18),
                       controller: _typeAheadController,
-                      placeholder: 'Search podcast title or publisher name'),
+                      placeholder: 'Search podcast title or publisher name',
+                      onEditingComplete: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            PodcastResultPage(_typeAheadController.text)));
+                      }),
                   suggestionsCallback: (pattern) async {
                     return Future.delayed(
                       Duration(seconds: 1),
