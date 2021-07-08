@@ -80,9 +80,9 @@ class _PodcastResultPageState extends State<PodcastResultPage> {
                                         title: Html(
                                             data: item['title_highlighted'],
                                             style: {
-                                              "*": Style(
+                                              '*': Style(
                                                   fontSize: FontSize.large),
-                                              ".ln-search-highlight": Style(
+                                              '.ln-search-highlight': Style(
                                                   backgroundColor:
                                                       Colors.amber),
                                             }),

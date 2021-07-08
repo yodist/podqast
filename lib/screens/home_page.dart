@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:podqast/providers/main_provider.dart';
+import 'package:podqast/widgets/profile_tab.dart';
 import 'package:podqast/widgets/overlay_player.dart';
 import 'package:podqast/widgets/podcast_search.dart';
 import 'package:podqast/widgets/podcast_home_tab.dart';
@@ -50,6 +51,7 @@ class _HomePageState extends State<HomePage> {
     _widgetOptions = <Widget>[
       PodcastHomeTab(),
       PodcastSearch(),
+      ProfileTab(),
     ];
   }
 
@@ -83,7 +85,8 @@ class _HomePageState extends State<HomePage> {
         },
         children: _widgetOptions,
       )),
-      persistentFooterButtons: <Widget>[
+      backgroundColor: Colors.white,
+      persistentFooterButtons: [
         // Visibility(
         //     visible:
         StreamBuilder<bool>(
@@ -93,7 +96,10 @@ class _HomePageState extends State<HomePage> {
               // Don't show anything until we've ascertained whether or not the
               // service is running, since we want to show a different UI in
               // each case.
-              return SizedBox();
+              return Visibility(
+                child: SizedBox(),
+                visible: false,
+              );
             }
             return snapshot.data!
                 ? Container(height: 120, width: 400, child: OverlayPlayer())
@@ -105,14 +111,31 @@ class _HomePageState extends State<HomePage> {
         // ,
       ],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(
+              Icons.home,
+              size: 30,
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(
+              Icons.search,
+              size: 30,
+            ),
             label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              size: 30,
+            ),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,

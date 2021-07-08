@@ -25,37 +25,46 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Widget firstWidget = LoginPage();
+    String firstRoute = '/login';
 
     if (FirebaseAuth.instance.currentUser != null) {
-      firstWidget = HomePage(title: 'Podqast');
+      firstRoute = '/';
     }
 
-    return CupertinoApp(
-      debugShowCheckedModeBanner: false,
-      title: 'PodQast',
-      theme: new CupertinoThemeData(
-        brightness: Brightness.light,
-        primaryColor: CupertinoColors.systemPurple,
-        barBackgroundColor: CupertinoColors.white,
-        scaffoldBackgroundColor: CupertinoColors.white,
-        textTheme: new CupertinoTextThemeData(
-          primaryColor: CupertinoColors.white,
-          textStyle: TextStyle(color: CupertinoColors.black),
-          // ... here I actually utilised all possible parameters in the constructor
-          // as you can see in the link underneath
+    return OverlaySupport.global(
+      child: CupertinoApp(
+        debugShowCheckedModeBanner: false,
+        title: 'PodQast',
+        theme: new CupertinoThemeData(
+          brightness: Brightness.light,
+          primaryColor: CupertinoColors.systemPurple,
+          barBackgroundColor: CupertinoColors.white,
+          scaffoldBackgroundColor: CupertinoColors.white,
+          textTheme: new CupertinoTextThemeData(
+            primaryColor: CupertinoColors.white,
+            textStyle: TextStyle(color: CupertinoColors.black),
+            // ... here I actually utilised all possible parameters in the constructor
+            // as you can see in the link underneath
+          ),
         ),
-      ),
-      home: AudioServiceWidget(
-        // child: HomePage(
-        //   title: "PodQast",
+        initialRoute: firstRoute,
+        routes: {
+          '/': (context) => AudioServiceWidget(
+                child: HomePage(title: 'Podqast'),
+              ),
+          '/login': (context) => LoginPage(),
+        },
+        // home: AudioServiceWidget(
+        //   // child: HomePage(
+        //   //   title: "PodQast",
+        //   // ),
+        //   child: OverlaySupport.global(child: firstWidget),
         // ),
-        child: OverlaySupport.global(child: firstWidget),
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          DefaultMaterialLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
       ),
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        DefaultMaterialLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
     );
   }
 }

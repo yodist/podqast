@@ -1,5 +1,7 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:podqast/screens/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:podqast/service/authentication.dart';
@@ -26,11 +28,14 @@ class _BodyState extends State<Body> {
 
   void click() {
     signInWithGoogle().then((user) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  AudioServiceWidget(child: HomePage(title: "PodQast"))));
+      if (user == null) {
+        toast('Please choose your Google Account to Login');
+      } else {
+        Navigator.pushReplacementNamed(context, '/');
+      }
+    }).onError((error, stackTrace) {
+      toast('Something is wrong, please try again later.');
+      return null;
     });
   }
 
