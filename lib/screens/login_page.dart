@@ -52,71 +52,104 @@ class _BodyState extends State<Body> {
         SizedBox(height: 30),
         Container(
           child: Text(
-            'Listen your favorite podcasts',
+            'Listen to your favorite podcasts',
             style: GoogleFonts.robotoCondensed(fontSize: 20),
             textAlign: TextAlign.center,
           ),
           width: 250,
         ),
-        SizedBox(height: 60),
+        SizedBox(height: 120),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
                 child: Center(
-              child: OutlinedButton(
+              child: TextButton(
                 onPressed: this.click,
-                style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey)),
-                  backgroundColor: Colors.grey[800],
-                ),
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text('Sign in',
-                          style: GoogleFonts.montserrat(
-                              fontSize: 20, color: Colors.white)),
+                      Image(
+                        image: AssetImage('assets/image/google_logo.png'),
+                        height: 35,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text(
+                          'Sign In With Google',
+                          style: GoogleFonts.openSans(
+                              fontSize: 18,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      )
                     ],
                   ),
                 ),
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(36.0),
+                            side: BorderSide(color: Colors.black87)))),
               ),
+              // OutlinedButton(
+              //   onPressed: this.click,
+              //   style: OutlinedButton.styleFrom(
+              //     shape: RoundedRectangleBorder(
+              //         side: BorderSide(color: Colors.grey)),
+              //     backgroundColor: Colors.grey[800],
+              //   ),
+              //   child: Padding(
+              //     padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: <Widget>[
+              //         Text('Sign in',
+              //             style: GoogleFonts.montserrat(
+              //                 fontSize: 20, color: Colors.white)),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ))
           ],
         ),
-        SizedBox(height: 30),
-        Container(
-          child: Text(
-            "Don't have an account? Sign up here",
-            style: GoogleFonts.robotoCondensed(
-                fontSize: 18, color: Color(0xff6734F6)),
-            textAlign: TextAlign.center,
-          ),
-          width: 180,
-        ),
-        SizedBox(height: 20),
-        Container(
-          child: Text(
-            "or",
-            style: GoogleFonts.robotoCondensed(fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-          width: 180,
-        ),
-        SizedBox(height: 20),
-        Container(
-          child: Text(
-            "Listen as a guest",
-            style: GoogleFonts.robotoCondensed(
-                fontSize: 18, color: Color(0xff6734F6)),
-            textAlign: TextAlign.center,
-          ),
-          width: 180,
-        ),
+        // SizedBox(height: 30),
+        // Container(
+        //   child: Text(
+        //     "Don't have an account? Sign up here",
+        //     style: GoogleFonts.robotoCondensed(
+        //         fontSize: 18, color: Color(0xff6734F6)),
+        //     textAlign: TextAlign.center,
+        //   ),
+        //   width: 180,
+        // ),
+        // SizedBox(height: 20),
+        // Container(
+        //   child: Text(
+        //     "or",
+        //     style: GoogleFonts.robotoCondensed(fontSize: 18),
+        //     textAlign: TextAlign.center,
+        //   ),
+        //   width: 180,
+        // ),
+        // SizedBox(height: 20),
+        // Container(
+        //   child: Text(
+        //     "Listen as a guest",
+        //     style: GoogleFonts.robotoCondensed(
+        //         fontSize: 18, color: Color(0xff6734F6)),
+        //     textAlign: TextAlign.center,
+        //   ),
+        //   width: 180,
+        // ),
         SizedBox(height: 90),
         Container(
           child: Text(
