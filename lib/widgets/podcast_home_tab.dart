@@ -36,51 +36,94 @@ class _PodcastHomeTabState extends State<PodcastHomeTab>
           ),
           backgroundColor: Colors.white,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.fromLTRB(15, 10, 0, 10),
-              child: Text(
-                "Top Podcasts",
-                style: TextStyle(fontSize: 28),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.fromLTRB(15, 10, 0, 10),
+                child: Text(
+                  "Top Podcasts",
+                  style: TextStyle(fontSize: 28),
+                ),
+                alignment: Alignment.centerLeft,
               ),
-              alignment: Alignment.centerLeft,
-            ),
-            Container(
-              alignment: Alignment.topLeft,
-              height: 250.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: <Widget>[
-                  FutureBuilder(
-                      future: data,
-                      builder: (context, snapshot) {
-                        return snapshot.hasData
-                            ? ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemCount:
-                                    (snapshot.data! as Map)['podcasts'].length,
-                                itemBuilder: (_, int position) {
-                                  var snapshotData = (snapshot.data! as Map);
-                                  final item =
-                                      snapshotData['podcasts'][position];
-                                  return podcastBlock(context, item['id'],
-                                      item['image'], item['title'],
-                                      publisher: item['publisher'],
-                                      description: item['description'],
-                                      genreIds: item['genreIds']);
-                                },
-                              )
-                            : Center(
-                                child: CircularProgressIndicator(),
-                              );
-                      }),
-                ],
+              Container(
+                alignment: Alignment.topLeft,
+                height: 250.0,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    FutureBuilder(
+                        future: data,
+                        builder: (context, snapshot) {
+                          return snapshot.hasData
+                              ? ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: (snapshot.data! as Map)['podcasts']
+                                      .length,
+                                  itemBuilder: (_, int position) {
+                                    var snapshotData = (snapshot.data! as Map);
+                                    final item =
+                                        snapshotData['podcasts'][position];
+                                    return podcastBlock(context, item['id'],
+                                        item['image'], item['title'],
+                                        publisher: item['publisher'],
+                                        description: item['description'],
+                                        genreIds: item['genreIds']);
+                                  },
+                                )
+                              : Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                        }),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.fromLTRB(15, 0, 0, 10),
+                child: Text(
+                  "Subscriptions",
+                  style: TextStyle(fontSize: 28),
+                ),
+                alignment: Alignment.centerLeft,
+              ),
+              Container(
+                alignment: Alignment.topLeft,
+                height: 250.0,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: <Widget>[
+                    FutureBuilder(
+                        future: data,
+                        builder: (context, snapshot) {
+                          return snapshot.hasData
+                              ? ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemCount: (snapshot.data! as Map)['podcasts']
+                                      .length,
+                                  itemBuilder: (_, int position) {
+                                    var snapshotData = (snapshot.data! as Map);
+                                    final item =
+                                        snapshotData['podcasts'][position];
+                                    return podcastBlock(context, item['id'],
+                                        item['image'], item['title'],
+                                        publisher: item['publisher'],
+                                        description: item['description'],
+                                        genreIds: item['genreIds']);
+                                  },
+                                )
+                              : Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                        }),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ));
   }
 }

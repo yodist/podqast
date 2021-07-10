@@ -143,14 +143,15 @@ class PodcastService {
 
   Future<String> getBaseUrl() async {
     bool production = false;
+    String api = 'api-test';
     await ConfigUtil.getConfigData().then((value) {
       production = value['production'];
     });
 
     if (production) {
-      return "https://listen-api.listennotes.com/api/v2";
-    } else {
-      return "https://listen-api-test.listennotes.com/api/v2";
+      api = 'api';
     }
+
+    return 'https://listen-$api.listennotes.com/api/v2';
   }
 }
