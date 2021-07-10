@@ -1,6 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:podqast/model/db/user.dart';
+import 'package:podqast/model/response.dart';
+import 'package:podqast/providers/main_provider.dart';
+import 'package:podqast/service/user_service.dart';
 import 'package:podqast/widgets/episode_card.dart';
 import 'package:podqast/service/podcast_service.dart';
 import 'package:podqast/util/file_util.dart';
@@ -9,6 +13,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class PodcastListPage extends StatefulWidget {
   PodcastListPage(this.id,
@@ -32,13 +37,15 @@ class PodcastListPage extends StatefulWidget {
 }
 
 class _PodcastListPageState extends State<PodcastListPage> {
-  PodcastService podcastService = new PodcastService();
+  PodcastService podcastService = PodcastService();
+  UserService userService = UserService();
 
   late Future<Map<String, dynamic>> podcastData;
   String title = "";
   String imageUrl = "";
   String description = "";
   String publisher = "";
+  bool subscribed = false;
 
   @override
   void initState() {
@@ -137,12 +144,35 @@ class _PodcastListPageState extends State<PodcastListPage> {
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.all(10),
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    Response response =
+                        await userService.subscribe(podcastId: widget.id);
+                    if (response.data != null) {
+                      context
+                          .read<MainProvider>()
+                          .updateUser(User.fromData(response.data));
+                    }
+                  },
                   child: Text(
-                    "SUBSCRIBE",
+                    context
+                            .select((MainProvider m) =>
+                                m.currentUser!.subscriptions!)
+                            .contains(widget.id)
+                        ? 'SUBSCRIBED'
+                        : 'SUBSCRIBE',
                     style: GoogleFonts.robotoCondensed(
                         fontSize: 16, color: Colors.black),
                   ),
+                  style: ButtonStyle(
+                      backgroundColor: context
+                              .select((MainProvider m) =>
+                                  m.currentUser!.subscriptions!)
+                              .contains(widget.id)
+                          ? MaterialStateProperty.all(Colors.yellow.shade200)
+                          : MaterialStateProperty.all(Colors.white),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ))),
                 ),
               ),
               FutureBuilder(

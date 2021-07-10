@@ -127,9 +127,9 @@ class _ProfileTabState extends State<ProfileTab> {
             TextButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
-                // Navigator.pushNamedAndRemoveUntil(
-                //     context, '/login', (route) => false);
-                SystemNavigator.pop();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/login', (route) => false);
+                // SystemNavigator.pop();
               },
               child: Text(
                 'Sign Out',

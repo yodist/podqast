@@ -9,6 +9,10 @@ class UserService {
       {required String email, required String fullName}) async {
     User user = User(email: email, fullName: fullName);
 
-    return await _firestoreService.createUser(user);
+    return _firestoreService.createUser(user);
+  }
+
+  Future<Response> subscribe({required String podcastId}) async {
+    return _firestoreService.addSubscriptionsToUser(podcastId);
   }
 }

@@ -2,9 +2,11 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:podqast/providers/main_provider.dart';
 import 'package:podqast/screens/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:podqast/service/authentication.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -31,6 +33,7 @@ class _BodyState extends State<Body> {
       if (user == null) {
         toast('Please choose your Google Account to Login');
       } else {
+        context.read<MainProvider>().updateUser(user);
         Navigator.pushReplacementNamed(context, '/');
       }
     }).onError((error, stackTrace) {

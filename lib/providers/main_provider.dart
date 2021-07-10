@@ -1,13 +1,16 @@
 import 'package:flutter/foundation.dart';
+import 'package:podqast/model/db/user.dart';
 
 /// Mix-in [DiagnosticableTreeMixin] to have access to [debugFillProperties] for the devtool
 // ignore: prefer_mixin
 class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
   int _count = 0;
   bool _showMiniPlayer = false;
+  User? _user;
 
   int get count => _count;
   bool get showMiniPlayer => _showMiniPlayer;
+  User? get currentUser => _user;
 
   void increment() {
     _count++;
@@ -21,6 +24,11 @@ class MainProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void hidePlayer() {
     _showMiniPlayer = false;
+    notifyListeners();
+  }
+
+  void updateUser(User user) {
+    _user = user;
     notifyListeners();
   }
 
